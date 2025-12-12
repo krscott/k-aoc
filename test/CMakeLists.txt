@@ -10,3 +10,4 @@ foreach(src IN LISTS TEST_SRCS)
   add_test(NAME ${name} COMMAND ${name})
   target_link_libraries(${name} aoc)
 endforeach()
+

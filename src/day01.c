@@ -25,14 +25,13 @@ i64 day01_count_hits(i64 pos, i64 move)
 i64 day01(FILE *input, bool b)
 {
     strbuf line = strbuf_init();
-    strbuf_reserve(&line, 256);
 
     i64 position = 50;
     i64 hits = 0;
 
     while (get_line(&line, input))
     {
-        fprintf(stderr, "> %s\n", line.ptr);
+        // fprintf(stderr, "> %s\n", line.ptr);
 
         int move = atoi(&line.ptr[1]);
 
@@ -64,7 +63,7 @@ i64 day01(FILE *input, bool b)
 
         position = mod_position;
 
-        fprintf(stderr, " pos: %2ld hits: %ld\n", position, hits);
+        // fprintf(stderr, " pos: %2ld hits: %ld\n", position, hits);
     }
 
     strbuf_deinit(&line);
