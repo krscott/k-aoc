@@ -9,6 +9,7 @@ struct opts
 {
     bool verbose;
     long day;
+    char const *part;
     char const *filename;
 };
 
@@ -20,14 +21,19 @@ static struct opts opts_parse(int const argc, char const *const *const argv)
         argc,
         argv,
         {
+            .pos_name = "file",
+            .ptr_str = &opts.filename,
+            .help = "Input File",
+        },
+        {
             .pos_name = "day",
             .ptr_long = &opts.day,
             .help = "Advent Day",
         },
         {
-            .pos_name = "file",
-            .ptr_str = &opts.filename,
-            .help = "Input File",
+            .pos_name = "part",
+            .ptr_str = &opts.part,
+            .help = "A or B",
         },
         {
             .short_name = 'v',
@@ -44,22 +50,34 @@ int main(int const argc, char const *const *const argv)
 {
     struct opts opts = opts_parse(argc, argv);
 
-    if (opts.verbose)
-    {
-        fprintf(stderr, "Day %ld - Input: %s\n", opts.day, opts.filename);
-    }
-
     FILE *input = fopen(opts.filename, "r");
 
+    bool const part_b = (opts.part[0] & 0x5F) == 'B';
+
     i64 answer = 0;
+
+    if (opts.verbose)
+    {
+        fprintf(
+            stderr,
+            "Day %ld %s - Input: %s\n",
+            opts.day,
+            part_b ? "B" : "A",
+            opts.filename
+        );
+    }
 
     switch (opts.day)
     {
         case 1:
-            answer = day01(input);
+            answer = day01(input, part_b);
             break;
         default:
-            printf("Day '%ld' not implemented\n", opts.day);
+            printf(
+                "Day %ld %s not implemented\n",
+                opts.day,
+                part_b ? "B" : "A"
+            );
             return 1;
     }
 

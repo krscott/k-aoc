@@ -7,7 +7,22 @@
 
 #define DIAL_SIZE 100
 
-i64 day01(FILE *input)
+i64 day01_count_hits(i64 pos, i64 move)
+{
+    i64 hits = 0;
+    i64 tmp = pos + move;
+    if (tmp >= DIAL_SIZE)
+    {
+        hits = tmp / DIAL_SIZE;
+    }
+    else if (tmp <= 0)
+    {
+        hits = -tmp / DIAL_SIZE + (pos != 0 ? 1 : 0);
+    }
+    return hits;
+}
+
+i64 day01(FILE *input, bool b)
 {
     strbuf line = strbuf_init();
     strbuf_reserve(&line, 256);
@@ -17,7 +32,7 @@ i64 day01(FILE *input)
 
     while (get_line(&line, input))
     {
-        // fprintf(stderr, "> %s\n", line.ptr);
+        fprintf(stderr, "> %s\n", line.ptr);
 
         int move = atoi(&line.ptr[1]);
 
@@ -33,13 +48,23 @@ i64 day01(FILE *input)
                 break;
         }
 
-        position = (position + DIAL_SIZE + move) % DIAL_SIZE;
-        // fprintf(stderr, "acc: %d\n", hits);
+        i64 const mod_position = modulo(position + move, DIAL_SIZE);
 
-        if (position == 0)
+        if (!b)
         {
-            ++hits;
+            if (mod_position == 0)
+            {
+                ++hits;
+            }
         }
+        else
+        {
+            hits += day01_count_hits(position, move);
+        }
+
+        position = mod_position;
+
+        fprintf(stderr, " pos: %2ld hits: %ld\n", position, hits);
     }
 
     strbuf_deinit(&line);
