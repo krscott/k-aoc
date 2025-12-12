@@ -7,6 +7,8 @@
 nodiscard bool get_line(strbuf *const buf, FILE *const stream)
 {
     strbuf_clear(buf);
+    strbuf_reserve(buf, 256);
+    buf->ptr[0] = '\0';
 
     int c = fgetc(stream);
     bool const ok = c != EOF;

@@ -11,6 +11,8 @@ struct opts
     long day;
     char const *part;
     char const *filename;
+    bool expect_flag;
+    long expect;
 };
 
 static struct opts opts_parse(int const argc, char const *const *const argv)
@@ -34,6 +36,13 @@ static struct opts opts_parse(int const argc, char const *const *const argv)
             .pos_name = "part",
             .ptr_str = &opts.part,
             .help = "A or B",
+        },
+        {
+            .short_name = 'e',
+            .long_name = "expect",
+            .ptr_flag = &opts.expect_flag,
+            .ptr_long = &opts.expect,
+            .help = "Expected value",
         },
         {
             .short_name = 'v',
@@ -81,9 +90,22 @@ int main(int const argc, char const *const *const argv)
             return 1;
     }
 
-    printf("%ld\n", answer);
+    int status = 0;
+
+    if (opts.expect_flag)
+    {
+        if (opts.expect != answer)
+        {
+            printf("Expected: %ld  Got: %ld\n", opts.expect, answer);
+            status = 1;
+        }
+    }
+    else
+    {
+        printf("%ld\n", answer);
+    }
 
     fclose(input);
 
-    return 0;
+    return status;
 }
