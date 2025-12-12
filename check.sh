@@ -13,3 +13,4 @@ check() {
 
 check input/day01.txt 1 a 969
 check input/day01.txt 1 b 5887
+check input/day02ex.txt 2 a 1227775554

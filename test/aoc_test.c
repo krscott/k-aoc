@@ -40,4 +40,10 @@ KTEST_MAIN
         ASSERT_INT_EQ(day01_count_hits(0, -150), 1);
         ASSERT_INT_EQ(day01_count_hits(0, -200), 2);
     }
+
+    KTEST(t_day02_count_invalid)
+    {
+        ASSERT_INT_EQ(day02_sum_invalid(11, 22), 11 + 22);
+        ASSERT_INT_EQ(day02_sum_invalid(95, 115), 99);
+    }
 }
