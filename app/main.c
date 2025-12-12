@@ -3,12 +3,12 @@
 #include "kcli.inc"
 #include <stdbool.h>
 #include <stdio.h>
-#include <stdlib.h>
 
 struct opts
 {
-    char const *name;
     bool verbose;
+    long day;
+    char const *filename;
 };
 
 static struct opts opts_parse(int const argc, char const *const *const argv)
@@ -19,10 +19,14 @@ static struct opts opts_parse(int const argc, char const *const *const argv)
         argc,
         argv,
         {
-            .pos_name = "name",
-            .ptr_str = &opts.name,
-            .optional = true,
-            .help = "Name to greet",
+            .pos_name = "day",
+            .ptr_long = &opts.day,
+            .help = "Advent Day",
+        },
+        {
+            .pos_name = "file",
+            .ptr_str = &opts.filename,
+            .help = "Input File",
         },
         {
             .short_name = 'v',
@@ -41,14 +45,22 @@ int main(int const argc, char const *const *const argv)
 
     if (opts.verbose)
     {
-        fprintf(stderr, "aoc: Creating greeting...\n");
+        fprintf(stderr, "Day %ld - Input: %s\n", opts.day, opts.filename);
     }
 
-    char *greeting = aoc_create_greeting(opts.name);
+    FILE *input = fopen(opts.filename, "r");
 
-    printf("%s\n", greeting);
+    switch (opts.day)
+    {
+        case 1:
+            day01(input);
+            break;
+        default:
+            printf("Day '%ld' not implemented\n", opts.day);
+            return 1;
+    }
 
-    free(greeting);
+    fclose(input);
 
-    return greeting ? 0 : 1;
+    return 0;
 }

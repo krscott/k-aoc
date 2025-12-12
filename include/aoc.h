@@ -1,6 +1,8 @@
 #ifndef AOC_H_
 #define AOC_H_
 
-char *aoc_create_greeting(char const *name);
+#include <stdio.h>
+
+void day01(FILE *input);
 
 #endif
