@@ -1,6 +1,6 @@
-add_library(cstart cstart.c)
+add_library(aoc aoc.c)
 
-target_include_directories(cstart PUBLIC ${PROJECT_SOURCE_DIR}/include)
-# target_sources(cstart PRIVATE file.c)
+target_include_directories(aoc PUBLIC ${PROJECT_SOURCE_DIR}/include)
+# target_sources(aoc PRIVATE file.c)
 
-install(TARGETS cstart)
+install(TARGETS aoc)
