@@ -1,6 +1,7 @@
 #include "aoc.h"
 
 #include "kcli.inc"
+#include "ktl/prelude.h"
 #include <stdbool.h>
 #include <stdio.h>
 
@@ -50,15 +51,19 @@ int main(int const argc, char const *const *const argv)
 
     FILE *input = fopen(opts.filename, "r");
 
+    i64 answer = 0;
+
     switch (opts.day)
     {
         case 1:
-            day01(input);
+            answer = day01(input);
             break;
         default:
             printf("Day '%ld' not implemented\n", opts.day);
             return 1;
     }
+
+    printf("%ld\n", answer);
 
     fclose(input);
 
