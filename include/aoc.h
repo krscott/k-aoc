@@ -1,6 +1,8 @@
 #ifndef AOC_H_
 #define AOC_H_
 
+#include <assert.h>
+#include <stdbool.h>
 #include <stdio.h>
 
 #include "ktl/lib/strings.h"
@@ -11,7 +13,10 @@
 #define nodiscard
 #endif
 
+nodiscard bool get_split(strbuf *buf, FILE *stream, char delim);
 nodiscard bool get_line(strbuf *buf, FILE *stream);
+
+nodiscard bool str2int(str s, i64 *out);
 
 #define ABS(x) ((x) < 0 ? -(x) : (x))
 
@@ -23,6 +28,7 @@ static inline i64 modulo(i64 x, i64 y)
 
 i64 day01_count_hits(i64 pos, i64 move);
 i64 day01(FILE *input, bool b);
+i64 day02_sum_invalid(i64 const start, i64 const end);
 i64 day02(FILE *input, bool b);
 
 #endif

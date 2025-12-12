@@ -81,6 +81,9 @@ int main(int const argc, char const *const *const argv)
         case 1:
             answer = day01(input, part_b);
             break;
+        case 2:
+            answer = day02(input, part_b);
+            break;
         default:
             printf(
                 "Day %ld %s not implemented\n",
