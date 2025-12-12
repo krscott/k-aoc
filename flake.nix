@@ -42,7 +42,7 @@
         pkgs = nixpkgs.legacyPackages.${system};
 
         # Final derivation including any overrides made to output package
-        inherit (self.packages.${system}) c-start c-start-gcc;
+        inherit (self.packages.${system}) aoc aoc-gcc;
 
         devPkgs =
           with pkgs;
@@ -52,7 +52,7 @@
             clang-tools # NOTE: clang-tools must come before clang
             clang
           ]
-          ++ c-start.buildInputs;
+          ++ aoc.buildInputs;
 
         mkApp = text: {
           type = "app";
@@ -67,34 +67,34 @@
       in
       {
         packages = {
-          c-start = pkgs.callPackage ./. {
+          aoc = pkgs.callPackage ./. {
             inherit (kcli.packages.${system}) kcli;
             inherit (ktest.packages.${system}) ktest;
             inherit (ktl.packages.${system}) ktl;
             stdenv = pkgs.clangStdenv;
           };
 
-          c-start-gcc = c-start.override {
+          aoc-gcc = aoc.override {
             inherit (pkgs) stdenv;
           };
 
-          c-start-win = c-start.override {
+          aoc-win = aoc.override {
             inherit (pkgs.pkgsCross.mingwW64) stdenv;
           };
 
-          default = c-start;
+          default = aoc;
 
-          c-start-test = c-start.override {
+          aoc-test = aoc.override {
             doCheck = true;
           };
-          c-start-gcc-test = c-start-gcc.override {
+          aoc-gcc-test = aoc-gcc.override {
             doCheck = true;
           };
         };
 
         devShells = {
           default = pkgs.mkShell {
-            inputsFrom = [ c-start ];
+            inputsFrom = [ aoc ];
             nativeBuildInputs = devPkgs;
             shellHook = ''
               source dev_shell.sh

@@ -1,4 +1,4 @@
-# c-start
+# aoc
 
 My rather opinionated C project template.
 

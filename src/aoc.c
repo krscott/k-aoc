@@ -1,11 +1,11 @@
-#include "cstart.h"
+#include "aoc.h"
 #include "ktl/lib/strings.inc"
 #include <assert.h>
 #include <stddef.h>
 
 // Create a greeting string.
 // Allocates - client code is responsible for freeing `name`
-char *cstart_create_greeting(char const *const name)
+char *aoc_create_greeting(char const *const name)
 {
     struct strbuf s = {0};
 
