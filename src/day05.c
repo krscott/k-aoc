@@ -68,12 +68,62 @@ static range range_from_str(str s)
 #include "ktl/struct/vec.inc"
 #undef ktl_vec
 
-i64 day05(FILE *const input, bool const b)
+static i64 day05a(FILE *const input)
 {
-    (void)b;
-
     defer(strbuf_deinit) strbuf line = strbuf_init();
     defer(ranges_deinit) ranges fresh_ranges = ranges_init();
+
+    while (get_line(&line, input) && line.len > 0)
+    {
+        range fresh_range = range_from_str(strbuf_as_str(line));
+
+        infof("Range ");
+        infof(range_fmt(fresh_range));
+        infof("\n");
+
+        ranges_push(&fresh_ranges, fresh_range);
+    }
+
+    i64 acc = 0;
+
+    while (get_line(&line, input) && line.len > 0)
+    {
+        i64 ingredient;
+        if (!str2int(strbuf_as_str(line), &ingredient))
+        {
+            panicf("Could not parse ID: %s", line.ptr);
+        }
+
+        bool is_fresh = false;
+        for (usize i = 0; i < fresh_ranges.len; ++i)
+        {
+            range const r = fresh_ranges.ptr[i];
+            if (range_in(r, ingredient))
+            {
+                infof("Ingredient %ld is in range ", ingredient);
+                infof(range_fmt(r));
+                infof("\n");
+                is_fresh = true;
+                break;
+            }
+        }
+
+        if (is_fresh)
+        {
+            ++acc;
+        }
+        else
+        {
+            infof("Ingredient %ld is spoiled\n", ingredient);
+        }
+    }
+
+    return acc;
+}
+
+static i64 day05b(FILE *const input)
+{
+    defer(strbuf_deinit) strbuf line = strbuf_init();
     defer(ranges_deinit) ranges distinct_ranges = ranges_init();
 
     while (get_line(&line, input) && line.len > 0)
@@ -83,48 +133,41 @@ i64 day05(FILE *const input, bool const b)
         infof("Range ");
         infof(range_fmt(fresh_range));
 
-        if (!b)
+        usize combined_index = 0;
+        bool is_distinct = true;
+        for (usize i = 0; i < distinct_ranges.len; ++i)
         {
-            ranges_push(&fresh_ranges, fresh_range);
-        }
-        else
-        {
-            usize combined_index = 0;
-            bool is_distinct = true;
-            for (usize i = 0; i < distinct_ranges.len; ++i)
+            range const d = distinct_ranges.ptr[i];
+            if (range_overlap(d, fresh_range))
             {
-                range const d = distinct_ranges.ptr[i];
-                if (range_overlap(d, fresh_range))
+                if (is_distinct)
                 {
-                    if (is_distinct)
-                    {
-                        is_distinct = false;
-                        combined_index = i;
-                        infof(" overlaps ");
-                        infof(range_fmt(d));
-                        distinct_ranges.ptr[combined_index] = range_bound(
-                            distinct_ranges.ptr[combined_index],
-                            fresh_range
-                        );
-                    }
-                    else
-                    {
-                        infof(" and ");
-                        infof(range_fmt(d));
-                        distinct_ranges.ptr[combined_index] = range_bound(
-                            distinct_ranges.ptr[combined_index],
-                            distinct_ranges.ptr[i]
-                        );
-                        ranges_swap_remove(&distinct_ranges, i);
-                        break;
-                    }
+                    is_distinct = false;
+                    combined_index = i;
+                    infof(" overlaps ");
+                    infof(range_fmt(d));
+                    distinct_ranges.ptr[combined_index] = range_bound(
+                        distinct_ranges.ptr[combined_index],
+                        fresh_range
+                    );
+                }
+                else
+                {
+                    infof(" and ");
+                    infof(range_fmt(d));
+                    distinct_ranges.ptr[combined_index] = range_bound(
+                        distinct_ranges.ptr[combined_index],
+                        distinct_ranges.ptr[i]
+                    );
+                    ranges_swap_remove(&distinct_ranges, i);
+                    break;
                 }
             }
-            if (is_distinct)
-            {
-                infof(" is distinct ");
-                ranges_push(&distinct_ranges, fresh_range);
-            }
+        }
+        if (is_distinct)
+        {
+            infof(" is distinct ");
+            ranges_push(&distinct_ranges, fresh_range);
         }
 
         infof("\n");
@@ -132,52 +175,20 @@ i64 day05(FILE *const input, bool const b)
 
     i64 acc = 0;
 
-    if (!b)
+    infof("Non-overlapping ranges:\n");
+    for (usize i = 0; i < distinct_ranges.len; ++i)
     {
-        while (get_line(&line, input) && line.len > 0)
-        {
-            i64 ingredient;
-            if (!str2int(strbuf_as_str(line), &ingredient))
-            {
-                panicf("Could not parse ID: %s", line.ptr);
-            }
-
-            bool is_fresh = false;
-            for (usize i = 0; i < fresh_ranges.len; ++i)
-            {
-                range const r = fresh_ranges.ptr[i];
-                if (range_in(r, ingredient))
-                {
-                    infof(
-                        "Ingredient %ld is in range (%ld-%ld)\n",
-                        ingredient,
-                        r.start,
-                        r.end
-                    );
-                    is_fresh = true;
-                    break;
-                }
-            }
-
-            if (is_fresh)
-            {
-                ++acc;
-            }
-            else
-            {
-                infof("Ingredient %ld is spoiled\n", ingredient);
-            }
-        }
-    }
-    else
-    {
-        for (usize i = 0; i < distinct_ranges.len; ++i)
-        {
-            range const r = distinct_ranges.ptr[i];
-            infof("Distinct range (%ld-%ld)\n", r.start, r.end);
-            acc += range_count(r);
-        }
+        range const r = distinct_ranges.ptr[i];
+        infof("  ");
+        infof(range_fmt(r));
+        infof("\n");
+        acc += range_count(r);
     }
 
     return acc;
+}
+
+i64 day05(FILE *const input, bool const b)
+{
+    return b ? day05b(input) : day05a(input);
 }
