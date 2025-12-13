@@ -1,0 +1,22 @@
+#include "aoc.h"
+#include "ktl/lib/strings.h"
+
+#include <assert.h>
+#include <stdio.h>
+
+i64 dayX(FILE *const input, bool const b)
+{
+    (void)b;
+
+    strbuf line = strbuf_init();
+
+    i64 acc = 0;
+
+    while (get_line(&line, input))
+    {
+    }
+
+    strbuf_deinit(&line);
+
+    return acc;
+}
