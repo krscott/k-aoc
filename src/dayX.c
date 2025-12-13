@@ -8,15 +8,13 @@ i64 dayX(FILE *const input, bool const b)
 {
     (void)b;
 
-    strbuf line = strbuf_init();
+    defer(strbuf_deinit) strbuf line = strbuf_init();
 
     i64 acc = 0;
 
     while (get_line(&line, input) && line.len > 0)
     {
     }
-
-    strbuf_deinit(&line);
 
     return acc;
 }
