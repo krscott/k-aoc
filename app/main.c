@@ -2,6 +2,7 @@
 
 #include "kcli.inc"
 #include "ktl/prelude.h"
+#include <assert.h>
 #include <stdbool.h>
 #include <stdio.h>
 
@@ -60,6 +61,7 @@ int main(int const argc, char const *const *const argv)
     struct opts opts = opts_parse(argc, argv);
 
     FILE *input = fopen(opts.filename, "r");
+    assert(input && "Could not open file"); // TODO: Error handling
 
     bool const part_b = (opts.part[0] & 0x5F) == 'B';
 
@@ -84,6 +86,75 @@ int main(int const argc, char const *const *const argv)
         case 2:
             answer = day02(input, part_b);
             break;
+        case 3:
+            answer = day03(input, part_b);
+            break;
+        // case 4:
+        //     answer = day04(input, part_b);
+        //     break;
+        // case 5:
+        //     answer = day05(input, part_b);
+        //     break;
+        // case 6:
+        //     answer = day06(input, part_b);
+        //     break;
+        // case 7:
+        //     answer = day07(input, part_b);
+        //     break;
+        // case 8:
+        //     answer = day08(input, part_b);
+        //     break;
+        // case 9:
+        //     answer = day09(input, part_b);
+        //     break;
+        // case 10:
+        //     answer = day10(input, part_b);
+        //     break;
+        // case 11:
+        //     answer = day11(input, part_b);
+        //     break;
+        // case 12:
+        //     answer = day12(input, part_b);
+        //     break;
+        // case 13:
+        //     answer = day13(input, part_b);
+        //     break;
+        // case 14:
+        //     answer = day14(input, part_b);
+        //     break;
+        // case 15:
+        //     answer = day15(input, part_b);
+        //     break;
+        // case 16:
+        //     answer = day16(input, part_b);
+        //     break;
+        // case 17:
+        //     answer = day17(input, part_b);
+        //     break;
+        // case 18:
+        //     answer = day18(input, part_b);
+        //     break;
+        // case 19:
+        //     answer = day19(input, part_b);
+        //     break;
+        // case 20:
+        //     answer = day20(input, part_b);
+        //     break;
+        // case 21:
+        //     answer = day21(input, part_b);
+        //     break;
+        // case 22:
+        //     answer = day22(input, part_b);
+        //     break;
+        // case 23:
+        //     answer = day23(input, part_b);
+        //     break;
+        // case 24:
+        //     answer = day24(input, part_b);
+        //     break;
+        // case 25:
+        //     answer = day25(input, part_b);
+        //     break;
         default:
             printf(
                 "Day %ld %s not implemented\n",

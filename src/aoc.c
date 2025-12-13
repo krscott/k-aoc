@@ -10,6 +10,8 @@
 nodiscard bool
 get_split(strbuf *const buf, FILE *const stream, char const delim)
 {
+    assert(stream);
+
     strbuf_clear(buf);
     strbuf_reserve(buf, 256);
     buf->ptr[0] = '\0';
