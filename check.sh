@@ -3,6 +3,10 @@ set -eu
 
 cd "$(dirname "$(readlink -f -- "$0")")"
 
+pwd
+. ./dev_shell.sh
+bld
+
 # Example shellcheck disable
 ## shellcheck disable=SC2086 # allow word splitting
 
@@ -14,3 +18,6 @@ check() {
 check input/day01.txt 1 a 969
 check input/day01.txt 1 b 5887
 check input/day02ex.txt 2 a 1227775554
+check input/day02.txt 2 a 40214376723
+check input/day02ex.txt 2 b 4174379265
+check input/day02.txt 2 b 50793864718

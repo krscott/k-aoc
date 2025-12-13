@@ -43,7 +43,7 @@ KTEST_MAIN
 
     KTEST(t_day02_count_invalid)
     {
-        ASSERT_INT_EQ(day02_sum_invalid(11, 22), 11 + 22);
-        ASSERT_INT_EQ(day02_sum_invalid(95, 115), 99);
+        ASSERT_INT_EQ(day02_sum_invalid(11, 22, false), 11 + 22);
+        ASSERT_INT_EQ(day02_sum_invalid(95, 115, false), 99);
     }
 }
