@@ -47,7 +47,6 @@ grid_get(grid const g, i64 const row, i64 const col, char *const out)
     return in_bounds;
 }
 
-#if 0
 static bool
 grid_set(grid const g, i64 const row, i64 const col, char const value)
 {
@@ -59,7 +58,6 @@ grid_set(grid const g, i64 const row, i64 const col, char const value)
     }
     return in_bounds;
 }
-#endif
 
 static grid grid_from_stream(FILE *const input)
 {
@@ -96,30 +94,28 @@ static usize grid_count_surrounding(
     return count;
 }
 
-i64 day04(FILE *const input, bool const b)
+static i64 take_rolls(grid *const g)
 {
-    (void)b;
-
-    grid g = grid_from_stream(input);
-    i64 height = (i64)grid_height(g);
-
-    i64 acc = 0;
+    i64 total = 0;
+    i64 const height = (i64)grid_height(*g);
 
     for (i64 row = 0; row < height; ++row)
     {
-        for (i64 col = 0; col < (i64)g.width; ++col)
+        for (i64 col = 0; col < (i64)g->width; ++col)
         {
             char ch = '?';
 
-            if (grid_get(g, row, col, &ch))
+            if (grid_get(*g, row, col, &ch))
             {
                 if (ch == '@')
                 {
-                    usize count = grid_count_surrounding(g, row, col, '@');
+                    usize count = grid_count_surrounding(*g, row, col, '@');
 
                     if (count <= 4)
                     {
-                        ++acc;
+                        ++total;
+                        (void)grid_set(*g, row, col, '.');
+
                         ch = 'x';
                     }
                 }
@@ -129,6 +125,25 @@ i64 day04(FILE *const input, bool const b)
         }
         printf("\n");
     }
+    printf("\n");
+
+    return total;
+}
+
+i64 day04(FILE *const input, bool const b)
+{
+    (void)b;
+
+    grid g = grid_from_stream(input);
+
+    i64 taken = 0;
+    i64 acc = 0;
+
+    do
+    {
+        taken = take_rolls(&g);
+        acc += taken;
+    } while (b && taken > 0);
 
     grid_deinit(&g);
 
