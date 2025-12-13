@@ -29,3 +29,7 @@ check input/day04ex.txt 4 a 13
 check input/day04.txt 4 a 1356
 check input/day04ex.txt 4 b 43
 check input/day04.txt 4 b 8713
+check input/day05ex.txt 5 a 3
+check input/day05.txt 5 a 756
+check input/day05ex.txt 5 b 14
+check input/day05.txt 5 b 355555479253787
