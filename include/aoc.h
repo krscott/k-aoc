@@ -13,21 +13,6 @@
 #define nodiscard
 #endif
 
-nodiscard bool
-append_stream_until(strbuf *const buf, FILE *const stream, char const delim);
-nodiscard bool get_split(strbuf *buf, FILE *stream, char delim);
-nodiscard bool get_line(strbuf *buf, FILE *stream);
-
-nodiscard bool str2int(str s, i64 *out);
-
-#define ABS(x) ((x) < 0 ? -(x) : (x))
-
-static inline i64 modulo(i64 x, i64 y)
-{
-    i64 const res = x % y;
-    return res >= 0 ? res : res + y;
-}
-
 i64 day01_count_hits(i64 pos, i64 move);
 i64 day01(FILE *input, bool b);
 i64 day02_sum_invalid(i64 start, i64 end, bool b);
@@ -57,5 +42,29 @@ i64 day24(FILE *input, bool b);
 i64 day25(FILE *input, bool b);
 
 i64 dayX(FILE *input, bool b);
+
+nodiscard bool
+append_stream_until(strbuf *const buf, FILE *const stream, char const delim);
+nodiscard bool get_split(strbuf *buf, FILE *stream, char delim);
+nodiscard bool get_line(strbuf *buf, FILE *stream);
+
+nodiscard bool str2int(str s, i64 *out);
+
+static inline i64 modulo(i64 x, i64 y)
+{
+    i64 const res = x % y;
+    return res >= 0 ? res : res + y;
+}
+
+#define infof(...)                                                             \
+    do                                                                         \
+    {                                                                          \
+        if (aoc_is_verbose)                                                    \
+        {                                                                      \
+            fprintf(stderr, __VA_ARGS__);                                      \
+        }                                                                      \
+    } while (0)
+
+extern bool aoc_is_verbose;
 
 #endif

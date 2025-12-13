@@ -7,6 +7,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+bool aoc_is_verbose = false;
+
 nodiscard bool
 append_stream_until(strbuf *const buf, FILE *const stream, char const delim)
 {

@@ -54,7 +54,7 @@ i64 day03(FILE *const input, bool const b)
             joltage = joltage * 10 + next_digit(&s, &remaining);
         }
 
-        // printf("%s - %ld\n", line.ptr, joltage);
+        infof("%s - %ld\n", line.ptr, joltage);
 
         acc += joltage;
     }
