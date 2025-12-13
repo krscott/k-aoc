@@ -6,6 +6,7 @@
 #include <stdio.h>
 
 #include "ktl/lib/strings.h"
+#include "ktl/prelude.h"
 
 #if defined(__clang__)
 #define nodiscard __attribute__((warn_unused_result))
