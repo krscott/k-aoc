@@ -4,15 +4,18 @@
 #include <assert.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h> // IWYU pragma: export
 
 #include "ktl/lib/strings.h"
-#include "ktl/prelude.h"
+#include "ktl/prelude.h" // IWYU pragma: export
 
 #if defined(__clang__)
 #define nodiscard __attribute__((warn_unused_result))
 #else
 #define nodiscard
 #endif
+
+#define defer(fn) __attribute__((cleanup(fn)))
 
 i64 day01_count_hits(i64 pos, i64 move);
 i64 day01(FILE *input, bool b);
@@ -64,6 +67,16 @@ static inline i64 modulo(i64 x, i64 y)
         {                                                                      \
             fprintf(stderr, __VA_ARGS__);                                      \
         }                                                                      \
+    } while (0)
+
+#define panicf(...)                                                            \
+    do                                                                         \
+    {                                                                          \
+        fprintf(stderr, __VA_ARGS__);                                          \
+        fprintf(stderr, "\n");                                                 \
+        fflush(stderr);                                                        \
+        assert(false);                                                         \
+        exit(1);                                                               \
     } while (0)
 
 extern bool aoc_is_verbose;
