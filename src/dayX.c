@@ -12,7 +12,7 @@ i64 dayX(FILE *const input, bool const b)
 
     i64 acc = 0;
 
-    while (get_line(&line, input))
+    while (get_line(&line, input) && line.len > 0)
     {
     }
 
