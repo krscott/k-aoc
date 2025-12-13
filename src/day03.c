@@ -45,19 +45,6 @@ i64 day03(FILE *const input, bool const b)
 
     while (get_line(&line, input) && line.len > 1)
     {
-        // str tens = strbuf_as_str(line);
-        // --(tens.len);
-        // usize const tens_idx = max_char_idx(tens);
-        //
-        // str ones = {
-        //     .ptr = &line.ptr[tens_idx + 1],
-        //     .len = line.len - tens_idx - 1
-        // };
-        // usize const ones_idx = max_char_idx(ones);
-        //
-        // i64 const joltage = (i64)(tens.ptr[tens_idx] - '0') * 10 +
-        //                     (i64)(ones.ptr[ones_idx] - '0');
-
         str s = strbuf_as_str(line);
         usize remaining = b ? 12 : 2;
         i64 joltage = 0;
@@ -67,7 +54,7 @@ i64 day03(FILE *const input, bool const b)
             joltage = joltage * 10 + next_digit(&s, &remaining);
         }
 
-        printf("%s - %ld\n", line.ptr, joltage);
+        // printf("%s - %ld\n", line.ptr, joltage);
 
         acc += joltage;
     }
