@@ -121,11 +121,11 @@ static i64 take_rolls(grid *const g)
                 }
             }
 
-            printf("%c", ch);
+            infof("%c", ch);
         }
-        printf("\n");
+        infof("\n");
     }
-    printf("\n");
+    infof("\n");
 
     return total;
 }

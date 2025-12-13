@@ -60,6 +60,8 @@ int main(int const argc, char const *const *const argv)
 {
     struct opts opts = opts_parse(argc, argv);
 
+    aoc_is_verbose = opts.verbose;
+
     FILE *input = fopen(opts.filename, "r");
     assert(input && "Could not open file"); // TODO: Error handling
 
@@ -67,16 +69,12 @@ int main(int const argc, char const *const *const argv)
 
     i64 answer = 0;
 
-    if (opts.verbose)
-    {
-        fprintf(
-            stderr,
-            "Day %ld %s - Input: %s\n",
-            opts.day,
-            part_b ? "B" : "A",
-            opts.filename
-        );
-    }
+    infof(
+        "Day %ld %s - Input: %s\n",
+        opts.day,
+        part_b ? "B" : "A",
+        opts.filename
+    );
 
     switch (opts.day)
     {

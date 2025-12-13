@@ -31,7 +31,7 @@ i64 day01(FILE *input, bool b)
 
     while (get_line(&line, input))
     {
-        // fprintf(stderr, "> %s\n", line.ptr);
+        infof("> %s\n", line.ptr);
 
         int move = atoi(&line.ptr[1]);
 
@@ -63,7 +63,7 @@ i64 day01(FILE *input, bool b)
 
         position = mod_position;
 
-        // fprintf(stderr, " pos: %2ld hits: %ld\n", position, hits);
+        infof(" pos: %2ld hits: %ld\n", position, hits);
     }
 
     strbuf_deinit(&line);

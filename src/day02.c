@@ -51,7 +51,7 @@ static bool is_repeating(i64 const x, bool const b)
         {
             if (is_repeating_n(s, n, i))
             {
-                // printf(" %ld(%d)", x, i);
+                infof(" %ld(%d)", x, i);
                 out = true;
                 break;
             }
@@ -98,11 +98,11 @@ i64 day02(FILE *input, bool b)
             break;
         }
 
-        // printf("%ld-%ld:", start, end);
+        infof("%ld-%ld:", start, end);
 
         acc += day02_sum_invalid(start, end, b);
 
-        // printf("\n");
+        infof("\n");
     }
 
     strbuf_deinit(&range);
