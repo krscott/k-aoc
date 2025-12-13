@@ -25,3 +25,4 @@ check input/day03ex.txt 3 a 357
 check input/day03.txt 3 a 17332
 check input/day03ex.txt 3 b 3121910778619
 check input/day03.txt 3 b 172516781546707
+check input/day04ex.txt 4 a 13
