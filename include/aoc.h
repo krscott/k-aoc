@@ -31,4 +31,6 @@ i64 day01(FILE *input, bool b);
 i64 day02_sum_invalid(i64 start, i64 end, bool b);
 i64 day02(FILE *input, bool b);
 
+i64 dayX(FILE *input, bool b);
+
 #endif
