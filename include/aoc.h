@@ -7,7 +7,7 @@
 
 #include "ktl/lib/strings.h"
 
-#if defined(__GNUC__) || defined(__clang__)
+#if defined(__clang__)
 #define nodiscard __attribute__((warn_unused_result))
 #else
 #define nodiscard
