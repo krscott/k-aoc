@@ -1,15 +1,6 @@
 # aoc
 
-My rather opinionated C project template.
-
-To start a project with this template, run:
-```
-./init-template.sh new_project_name
-```
-
-It comes with some of my personal C libraries. Delete what you don't need.
-
-Don't forget to [change](https://choosealicense.com/) the LICENSE.
+Advent of Code 2025 in C
 
 ## Development
 
