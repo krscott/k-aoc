@@ -90,9 +90,9 @@ int main(int const argc, char const *const *const argv)
         case 4:
             answer = day04(input, part_b);
             break;
-        // case 5:
-        //     answer = day05(input, part_b);
-        //     break;
+        case 5:
+            answer = day05(input, part_b);
+            break;
         // case 6:
         //     answer = day06(input, part_b);
         //     break;
