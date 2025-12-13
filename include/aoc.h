@@ -28,7 +28,7 @@ static inline i64 modulo(i64 x, i64 y)
 
 i64 day01_count_hits(i64 pos, i64 move);
 i64 day01(FILE *input, bool b);
-i64 day02_sum_invalid(i64 const start, i64 const end);
+i64 day02_sum_invalid(i64 start, i64 end, bool b);
 i64 day02(FILE *input, bool b);
 
 #endif

@@ -4,40 +4,71 @@
 #include <assert.h>
 #include <stdio.h>
 
-static bool is_repeating_pair(i64 const x)
+static bool is_repeating_n(char const *const s, int const n, int const div)
 {
-    char s[30] = {0};
-
-    int const n = snprintf(s, sizeof(s), "%ld", x);
-
-    // printf("\n%ld - ", x);
-    if (n % 2 != 0)
+    if (n % div != 0)
     {
         return false;
     }
 
-    int const half = n / 2;
-    for (int i = 0; i < half; ++i)
+    int const section_size = n / div;
+
+    for (int i = 0; i < section_size; ++i)
     {
-        // printf("%c=%c ", s[i], s[i + half]);
-        if (s[i] != s[i + half])
+        char const c = s[i];
+        for (int j = 1; j < div; ++j)
         {
-            return false;
+            int const offset = i + j * section_size;
+            if (offset >= n)
+            {
+                break;
+            }
+            if (c != s[offset])
+            {
+                return false;
+            }
         }
     }
 
     return true;
 }
 
-i64 day02_sum_invalid(i64 const start, i64 const end)
+static bool is_repeating(i64 const x, bool const b)
+{
+    char s[30] = {0};
+
+    int const n = snprintf(s, sizeof(s), "%ld", x);
+
+    bool out = false;
+
+    if (!b)
+    {
+        out = is_repeating_n(s, n, 2);
+    }
+    else
+    {
+        for (int i = 2; i <= n; ++i)
+        {
+            if (is_repeating_n(s, n, i))
+            {
+                // printf(" %ld(%d)", x, i);
+                out = true;
+                break;
+            }
+        }
+    }
+
+    return out;
+}
+
+i64 day02_sum_invalid(i64 const start, i64 const end, bool const b)
 {
     i64 acc = 0;
 
     for (i64 x = start; x <= end; ++x)
     {
-        if (is_repeating_pair(x))
+        if (is_repeating(x, b))
         {
-            // printf(" %ld", x);
             acc += x;
         }
     }
@@ -69,7 +100,7 @@ i64 day02(FILE *input, bool b)
 
         // printf("%ld-%ld:", start, end);
 
-        acc += day02_sum_invalid(start, end);
+        acc += day02_sum_invalid(start, end, b);
 
         // printf("\n");
     }
