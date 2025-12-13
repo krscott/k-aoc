@@ -8,14 +8,8 @@
 #include <stdlib.h>
 
 nodiscard bool
-get_split(strbuf *const buf, FILE *const stream, char const delim)
+append_stream_until(strbuf *const buf, FILE *const stream, char const delim)
 {
-    assert(stream);
-
-    strbuf_clear(buf);
-    strbuf_reserve(buf, 256);
-    buf->ptr[0] = '\0';
-
     int c = fgetc(stream);
     bool const ok = c != EOF;
 
@@ -25,6 +19,18 @@ get_split(strbuf *const buf, FILE *const stream, char const delim)
     }
 
     return ok;
+}
+
+nodiscard bool
+get_split(strbuf *const buf, FILE *const stream, char const delim)
+{
+    assert(stream);
+
+    strbuf_clear(buf);
+    strbuf_reserve(buf, 256);
+    buf->ptr[0] = '\0';
+
+    return append_stream_until(buf, stream, delim);
 }
 
 nodiscard bool get_line(strbuf *const buf, FILE *const stream)

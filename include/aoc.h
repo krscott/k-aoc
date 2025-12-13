@@ -13,6 +13,8 @@
 #define nodiscard
 #endif
 
+nodiscard bool
+append_stream_until(strbuf *const buf, FILE *const stream, char const delim);
 nodiscard bool get_split(strbuf *buf, FILE *stream, char delim);
 nodiscard bool get_line(strbuf *buf, FILE *stream);
 
