@@ -23,8 +23,8 @@ static usize grid_height(grid const g)
 static bool
 grid_at(grid const g, i64 const row, i64 const col, char **const out)
 {
-    bool const in_bounds = 0 <= row && row <= (i64)grid_height(g) && 0 <= col &&
-                           col < (i64)g.width;
+    bool const in_bounds =
+        0 <= row && row < (i64)grid_height(g) && 0 <= col && col < (i64)g.width;
 
     if (in_bounds)
     {
@@ -83,10 +83,13 @@ static usize grid_count_surrounding(
     {
         for (isize dc = col > 0 ? -1 : 0; dc <= 1; ++dc)
         {
-            char ch;
-            if (grid_get(g, row + dr, col + dc, &ch) && ch == match)
+            if (dr != 0 || dc != 0)
             {
-                ++count;
+                char ch;
+                if (grid_get(g, row + dr, col + dc, &ch) && ch == match)
+                {
+                    ++count;
+                }
             }
         }
     }
@@ -111,7 +114,7 @@ static i64 take_rolls(grid *const g)
                 {
                     usize count = grid_count_surrounding(*g, row, col, '@');
 
-                    if (count <= 4)
+                    if (count < 4)
                     {
                         ++total;
                         (void)grid_set(*g, row, col, '.');
@@ -125,7 +128,7 @@ static i64 take_rolls(grid *const g)
         }
         infof("\n");
     }
-    infof("\n");
+    infof("taken: %ld\n", total);
 
     return total;
 }
