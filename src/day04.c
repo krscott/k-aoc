@@ -102,6 +102,7 @@ static i64 take_rolls(grid *const g)
     i64 total = 0;
     i64 const height = (i64)grid_height(*g);
 
+    // Mark
     for (i64 row = 0; row < height; ++row)
     {
         for (i64 col = 0; col < (i64)g->width; ++col)
@@ -112,24 +113,35 @@ static i64 take_rolls(grid *const g)
             {
                 if (ch == '@')
                 {
-                    usize count = grid_count_surrounding(*g, row, col, '@');
+                    usize count = grid_count_surrounding(*g, row, col, '@') +
+                                  grid_count_surrounding(*g, row, col, 'x');
 
                     if (count < 4)
                     {
                         ++total;
-                        (void)grid_set(*g, row, col, '.');
-
-                        ch = 'x';
+                        (void)grid_set(*g, row, col, 'x');
                     }
                 }
             }
+        }
+    }
 
+    // Sweep
+    for (i64 row = 0; row < height; ++row)
+    {
+        for (i64 col = 0; col < (i64)g->width; ++col)
+        {
+            char ch = '?';
+            if (grid_get(*g, row, col, &ch) && ch == 'x')
+            {
+                (void)grid_set(*g, row, col, '.');
+            }
             infof("%c", ch);
         }
         infof("\n");
     }
-    infof("taken: %ld\n", total);
 
+    infof("taken: %ld\n", total);
     return total;
 }
 
