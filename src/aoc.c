@@ -4,10 +4,7 @@
 #include "ktl/lib/strings.inc"
 #include "string.h"
 #include <assert.h>
-#include <ctype.h>
-#include <errno.h>
 #include <stdio.h>
-#include <stdlib.h>
 
 bool aoc_is_verbose = false;
 
@@ -81,4 +78,32 @@ nodiscard bool str2int(str s, i64 *out)
         *out = acc;
     }
     return ok;
+}
+
+#define chargrid__list strbuf
+#define grid chargrid
+#include "gen/grid.inc"
+#undef grid
+
+void chargrid_read_stream(chargrid *const g, FILE *const input)
+{
+    for (;;)
+    {
+        int c = getc(input);
+        if (c == EOF)
+        {
+            break;
+        }
+        if (c == '\n' || c == '\r')
+        {
+            if (g->width == 0)
+            {
+                g->width = g->buf.len;
+            }
+        }
+        else
+        {
+            chargrid_push(g, (char)c);
+        }
+    }
 }

@@ -1,8 +1,8 @@
 // No header guard - repeatable include
 
-#include "aoc.h"
 #include "ktl/lib/integers.h"
 #include "ktl/macros.h"
+#include "macros.h"
 
 #include <assert.h>
 #include <stdbool.h>

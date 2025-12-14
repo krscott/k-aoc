@@ -13,8 +13,8 @@
 
 #define intgrid__list numberlist
 #define grid intgrid
-#include "grid.h"
-#include "grid.inc"
+#include "gen/grid.h"
+#include "gen/grid.inc"
 #undef grid
 
 static i64 calculate_column(intgrid g, usize col, char op)
@@ -75,35 +75,6 @@ static i64 day06a(FILE *const input)
     }
 
     return acc;
-}
-
-#define chargrid__list strbuf
-#define grid chargrid
-#include "grid.h"
-#include "grid.inc"
-#undef grid
-
-static void chargrid_read_stream(chargrid *const g, FILE *const input)
-{
-    for (;;)
-    {
-        int c = getc(input);
-        if (c == EOF)
-        {
-            break;
-        }
-        if (c == '\n' || c == '\r')
-        {
-            if (g->width == 0)
-            {
-                g->width = g->buf.len;
-            }
-        }
-        else
-        {
-            chargrid_push(g, (char)c);
-        }
-    }
 }
 
 static i64 cephalopod_math(chargrid chars, i64 op_row, i64 op_col, bool mult)
