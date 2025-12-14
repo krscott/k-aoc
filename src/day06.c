@@ -13,6 +13,7 @@
 
 #define intgrid__list numberlist
 #define grid intgrid
+#include "grid.h"
 #include "grid.inc"
 #undef grid
 
@@ -78,6 +79,7 @@ static i64 day06a(FILE *const input)
 
 #define chargrid__list strbuf
 #define grid chargrid
+#include "grid.h"
 #include "grid.inc"
 #undef grid
 
