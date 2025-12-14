@@ -37,3 +37,7 @@ check input/day06ex.txt 6 a 4277556
 check input/day06.txt 6 a 6725216329103
 check input/day06ex.txt 6 b 3263827
 check input/day06.txt 6 b 10600728112865
+check input/day07ex.txt 7 a 21
+check input/day07.txt 7 a 1535
+check input/day07ex.txt 7 b 40
+check input/day07.txt 7 b 4404709551015

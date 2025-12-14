@@ -1,5 +1,7 @@
-#include "aoc.h"
+#include "ktl/lib/integers.h"
 #include "ktl/macros.h"
+#include "macros.h"
+#include <assert.h>
 
 #ifndef grid // dev-only
 #include "gen/grid.h"
@@ -16,6 +18,24 @@ nodiscard grid grid_m(init)(void)
     };
 }
 
+nodiscard grid grid_m(init_height_width)(
+    usize const height, usize const width, grid_T const fill
+)
+{
+    usize const len = height * width;
+
+    grid g = grid_m(init)();
+    KTL_TEMPLATE(grid_list, reserve)(&g.buf, len);
+
+    for (usize i = 0; i < len; ++i)
+    {
+        KTL_TEMPLATE(grid_list, push)(&g.buf, fill);
+    }
+
+    g.width = width;
+    return g;
+}
+
 void grid_m(deinit)(grid *grid)
 {
     KTL_TEMPLATE(grid_list, deinit)(&grid->buf);
@@ -28,6 +48,7 @@ void grid_m(push)(grid *const g, grid_T const value)
 
 nodiscard usize grid_m(height)(grid const g)
 {
+    assert(g.width > 0);
     return g.buf.len / g.width;
 }
 
@@ -69,3 +90,27 @@ grid_m(set)(grid const g, i64 const row, i64 const col, grid_T const value)
     }
     return in_bounds;
 }
+
+#ifdef grid_T_eq
+nodiscard bool grid_m(find)(
+    grid const g, grid_T const value, i64 *const out_row, i64 *const out_col
+)
+{
+    assert(g.width > 0);
+
+    usize idx;
+    bool const found = KTL_TEMPLATE(grid_list, find_index)(g.buf, value, &idx);
+    if (found)
+    {
+        if (out_row)
+        {
+            *out_row = (i64)(idx / g.width);
+        }
+        if (out_col)
+        {
+            *out_col = (i64)(idx % g.width);
+        }
+    }
+    return found;
+}
+#endif
