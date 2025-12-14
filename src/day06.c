@@ -4,19 +4,6 @@
 #include <assert.h>
 #include <stdio.h>
 
-#define numberlist__type i64
-#define numberlist__infallible_allocator true
-#define ktl_vec numberlist
-#include "ktl/struct/vec.h"
-#include "ktl/struct/vec.inc"
-#undef ktl_vec
-
-#define intgrid__list numberlist
-#define grid intgrid
-#include "gen/grid.h"
-#include "gen/grid.inc"
-#undef grid
-
 static i64 calculate_column(intgrid g, usize col, char op)
 {
     i64 acc = op == '*' ? 1 : 0;

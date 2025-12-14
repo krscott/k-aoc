@@ -28,4 +28,13 @@
         exit(1);                                                               \
     } while (0)
 
+#define expect(cond)                                                           \
+    do                                                                         \
+    {                                                                          \
+        if (!(cond))                                                           \
+        {                                                                      \
+            panicf("Expected: " #cond);                                        \
+        }                                                                      \
+    } while (0)
+
 #endif

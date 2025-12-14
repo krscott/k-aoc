@@ -57,7 +57,23 @@ static inline i64 modulo(i64 x, i64 y)
 #define grid chargrid
 #include "gen/grid.h"
 #undef grid
-void chargrid_read_stream(chargrid *const g, FILE *const input);
+void chargrid_read_stream(chargrid *g, FILE *input);
+void chargrid_print_info(chargrid g);
+
+#define intlist__type i64
+#define intlist__infallible_allocator true
+#define ktl_vec intlist
+#include "ktl/struct/vec.h"
+#undef ktl_vec
+
+#define intgrid__list intlist
+#define grid intgrid
+#include "gen/grid.h"
+#undef grid
+void intgrid_print_info(intgrid g, int cell_padding);
+bool intgrid_add(intgrid g, i64 row, i64 col, i64 addition);
+
+// Globals
 
 extern bool aoc_is_verbose;
 

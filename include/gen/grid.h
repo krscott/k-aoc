@@ -18,6 +18,9 @@
 
 // Macros
 
+KTL_DIAG_PUSH
+KTL_DIAG_IGNORE(-Wundef)
+
 #undef grid_m
 #define grid_m(x) KTL_TEMPLATE(grid, x)
 
@@ -26,6 +29,15 @@
 
 #undef grid_T
 #define grid_T KTL_TEMPLATE(grid_list, _type)
+
+#undef grid_T_eq
+#if KTL_TEMPLATE(grid_T, _eq)
+#define grid_T_eq(a, b) KTL_TEMPLATE(grid_T, eq)((a), (b))
+#elif KTL_TEMPLATE(grid_T, _ord)
+#define grid_T_eq(a, b) (0 == KTL_TEMPLATE(grid_T, cmp)((a), (b)))
+#endif
+
+KTL_DIAG_POP
 
 #ifndef KTL_INC
 
@@ -49,11 +61,17 @@ typedef struct grid
 // Methods
 
 nodiscard grid grid_m(init)(void);
+nodiscard
+    grid grid_m(init_height_width)(usize height, usize width, grid_T fill);
 void grid_m(deinit)(grid *grid);
 void grid_m(push)(grid *g, grid_T value);
 nodiscard usize grid_m(height)(grid g);
 nodiscard bool grid_m(at)(grid g, i64 row, i64 col, grid_T **out);
 nodiscard bool grid_m(get)(grid g, i64 row, i64 col, grid_T *out);
 nodiscard bool grid_m(set)(grid g, i64 row, i64 col, grid_T value);
+
+#ifdef grid_T_eq
+nodiscard bool grid_m(find)(grid g, grid_T value, i64 *out_row, i64 *out_col);
+#endif
 
 #endif // KTL_INC

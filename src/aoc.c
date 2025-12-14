@@ -107,3 +107,59 @@ void chargrid_read_stream(chargrid *const g, FILE *const input)
         }
     }
 }
+
+void chargrid_print_info(chargrid const g)
+{
+    assert(g.width > 0);
+    usize const height = chargrid_height(g);
+    for (i64 row = 0; row < (i64)height; ++row)
+    {
+        char *ptr;
+        expect(chargrid_at(g, row, 0, &ptr));
+        infof("%.*s\n", (int)g.width, ptr);
+    }
+}
+
+#define ktl_vec intlist
+#include "ktl/struct/vec.inc"
+#undef ktl_vec
+
+#define grid intgrid
+#include "gen/grid.inc"
+#undef grid
+
+void intgrid_print_info(intgrid const g, int const cell_padding)
+{
+    assert(g.width > 0);
+    usize const height = intgrid_height(g);
+    for (i64 row = 0; row < (i64)height; ++row)
+    {
+        for (i64 col = 0; col < (i64)g.width; ++col)
+        {
+            i64 val;
+            expect(intgrid_get(g, row, col, &val));
+            if (val == 0)
+            {
+                infof("%*c ", cell_padding, ' ');
+            }
+            else
+            {
+                infof("%*ld ", cell_padding, val);
+            }
+        }
+        infof("\n");
+    }
+}
+
+bool intgrid_add(
+    intgrid const g, i64 const row, i64 const col, i64 const addition
+)
+{
+    i64 prev;
+    bool const ok = intgrid_get(g, row, col, &prev);
+    if (ok)
+    {
+        expect(intgrid_set(g, row, col, prev + addition));
+    }
+    return ok;
+}
