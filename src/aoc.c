@@ -2,7 +2,9 @@
 
 #include "ktl/lib/strings.h"
 #include "ktl/lib/strings.inc"
+#include "string.h"
 #include <assert.h>
+#include <ctype.h>
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -42,13 +44,41 @@ nodiscard bool get_line(strbuf *const buf, FILE *const stream)
 
 nodiscard bool str2int(str s, i64 *out)
 {
-    assert(s.len > 0);
-    errno = 0;
-    i64 value = atoll(s.ptr);
-    bool ok = (errno == 0);
+    s = str_trim(s);
+
+    bool const neg = (s.ptr[0] == '-');
+    if (neg)
+    {
+        str_split_at(s, 1, NULL, &s);
+    }
+
+    bool ok = false;
+    i64 acc = 0;
+
+    for (usize i = 0; i < s.len; ++i)
+    {
+        char const c = s.ptr[i];
+        ok = '0' <= c && c <= '9';
+        if (ok)
+        {
+            if (neg)
+            {
+                acc = acc * 10 - (i64)(c - '0');
+            }
+            else
+            {
+                acc = acc * 10 + (i64)(c - '0');
+            }
+        }
+        else
+        {
+            break;
+        }
+    }
+
     if (ok)
     {
-        *out = value;
+        *out = acc;
     }
     return ok;
 }
