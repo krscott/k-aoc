@@ -37,10 +37,8 @@ static i64 calculate_column(intgrid g, usize col, char op)
     return acc;
 }
 
-i64 day06(FILE *const input, bool const b)
+static i64 day06a(FILE *const input)
 {
-    (void)b;
-
     defer(intgrid_deinit) intgrid numbers = intgrid_init();
     defer(strbuf_deinit) strbuf line = strbuf_init();
 
@@ -76,4 +74,103 @@ i64 day06(FILE *const input, bool const b)
     }
 
     return acc;
+}
+
+#define chargrid__list strbuf
+#define grid chargrid
+#include "grid.inc"
+#undef grid
+
+static void chargrid_read_stream(chargrid *const g, FILE *const input)
+{
+    for (;;)
+    {
+        int c = getc(input);
+        if (c == EOF)
+        {
+            break;
+        }
+        if (c == '\n' || c == '\r')
+        {
+            if (g->width == 0)
+            {
+                g->width = g->buf.len;
+            }
+        }
+        else
+        {
+            chargrid_push(g, (char)c);
+        }
+    }
+}
+
+static i64 cephalopod_math(chargrid chars, i64 op_row, i64 op_col, bool mult)
+{
+    i64 acc = mult ? 1 : 0;
+
+    char ch;
+    for (i64 col = op_col;; ++col)
+    {
+        bool any_digit = false;
+        i64 num = 0;
+
+        for (i64 row = 0; row < op_row; ++row)
+        {
+            if (chargrid_get(chars, row, col, &ch))
+            {
+                if ('0' <= ch && ch <= '9')
+                {
+                    num = num * 10 + (ch - '0');
+                    any_digit = true;
+                }
+            }
+        }
+
+        if (!any_digit)
+        {
+            break;
+        }
+
+        infof(" %ld", num);
+
+        if (mult)
+        {
+            acc *= num;
+        }
+        else
+        {
+            acc += num;
+        }
+    }
+
+    infof(" -> %ld\n", acc);
+
+    return acc;
+}
+
+static i64 day06b(FILE *const input)
+{
+    defer(chargrid_deinit) chargrid chars = chargrid_init();
+    chargrid_read_stream(&chars, input);
+
+    i64 acc = 0;
+
+    i64 const op_row = (i64)chargrid_height(chars) - 1;
+    char op;
+    for (i64 col = 0; chargrid_get(chars, op_row, col, &op); ++col)
+    {
+        if (op == '*' || op == '+')
+        {
+            infof("%c", op);
+            acc += cephalopod_math(chars, op_row, col, op == '*');
+        }
+    }
+    infof("\n");
+
+    return acc;
+}
+
+i64 day06(FILE *const input, bool const b)
+{
+    return b ? day06b(input) : day06a(input);
 }
