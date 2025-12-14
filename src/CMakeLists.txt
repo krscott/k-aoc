@@ -4,7 +4,7 @@ add_library(aoc aoc.c
   day03.c
   day04.c
   day05.c
-  # day06.c
+  day06.c
   # day07.c
   # day08.c
   # day09.c
