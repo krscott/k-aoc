@@ -1,7 +1,13 @@
-#include "grid.h"
-
 #include "aoc.h"
 #include "ktl/macros.h"
+
+#ifndef grid // dev-only
+#include "grid.h"
+#endif
+
+#define KTL_INC
+#include "grid.h"
+#undef KTL_INC
 
 nodiscard grid grid_m(init)(void)
 {
