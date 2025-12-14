@@ -8,14 +8,7 @@
 
 #include "ktl/lib/strings.h"
 #include "ktl/prelude.h" // IWYU pragma: export
-
-#if defined(__clang__)
-#define nodiscard __attribute__((warn_unused_result))
-#else
-#define nodiscard
-#endif
-
-#define defer(fn) __attribute__((cleanup(fn)))
+#include "macros.h"      // IWYU pragma: export
 
 i64 day01_count_hits(i64 pos, i64 move);
 i64 day01(FILE *input, bool b);
@@ -60,24 +53,11 @@ static inline i64 modulo(i64 x, i64 y)
     return res >= 0 ? res : res + y;
 }
 
-#define infof(...)                                                             \
-    do                                                                         \
-    {                                                                          \
-        if (aoc_is_verbose)                                                    \
-        {                                                                      \
-            fprintf(stderr, __VA_ARGS__);                                      \
-        }                                                                      \
-    } while (0)
-
-#define panicf(...)                                                            \
-    do                                                                         \
-    {                                                                          \
-        fprintf(stderr, __VA_ARGS__);                                          \
-        fprintf(stderr, "\n");                                                 \
-        fflush(stderr);                                                        \
-        assert(false);                                                         \
-        exit(1);                                                               \
-    } while (0)
+#define chargrid__list strbuf
+#define grid chargrid
+#include "gen/grid.h"
+#undef grid
+void chargrid_read_stream(chargrid *const g, FILE *const input);
 
 extern bool aoc_is_verbose;
 

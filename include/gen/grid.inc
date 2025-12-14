@@ -2,11 +2,11 @@
 #include "ktl/macros.h"
 
 #ifndef grid // dev-only
-#include "grid.h"
+#include "gen/grid.h"
 #endif
 
 #define KTL_INC
-#include "grid.h"
+#include "gen/grid.h"
 #undef KTL_INC
 
 nodiscard grid grid_m(init)(void)
