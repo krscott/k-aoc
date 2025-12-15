@@ -1,7 +1,7 @@
 #ifndef AOC_MACROS_H_
 #define AOC_MACROS_H_
 
-#if defined(__clang__)
+#if defined(__GNUC__) || defined(__clang__)
 #define nodiscard __attribute__((warn_unused_result))
 #else
 #define nodiscard
