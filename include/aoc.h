@@ -71,7 +71,7 @@ void chargrid_print_info(chargrid g);
 #include "gen/grid.h"
 #undef grid
 void intgrid_print_info(intgrid g, int cell_padding);
-bool intgrid_add(intgrid g, i64 row, i64 col, i64 addition);
+bool intgrid_add(intgrid g, usize row, usize col, i64 addition);
 
 // Globals
 

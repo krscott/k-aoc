@@ -18,9 +18,9 @@ i64 day07(FILE *const input, bool const b)
     i64 acc = 0;
 
     expect(height > 0);
-    for (i64 row = 1; row < (i64)height; ++row)
+    for (usize row = 1; row < height; ++row)
     {
-        for (i64 col = 0; col < (i64)chars.width; ++col)
+        for (usize col = 0; col < chars.width; ++col)
         {
             char above;
             expect(chargrid_get(chars, row - 1, col, &above));
@@ -64,10 +64,10 @@ i64 day07(FILE *const input, bool const b)
 
     if (b)
     {
-        for (i64 col = 0; col < (i64)chars.width; ++col)
+        for (usize col = 0; col < chars.width; ++col)
         {
             i64 amt;
-            expect(intgrid_get(timelines, (i64)height - 1, col, &amt));
+            expect(intgrid_get(timelines, height - 1, col, &amt));
             acc += amt;
         }
     }

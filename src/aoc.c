@@ -112,7 +112,7 @@ void chargrid_print_info(chargrid const g)
 {
     assert(g.width > 0);
     usize const height = chargrid_height(g);
-    for (i64 row = 0; row < (i64)height; ++row)
+    for (usize row = 0; row < height; ++row)
     {
         char *ptr;
         expect(chargrid_at(g, row, 0, &ptr));
@@ -132,9 +132,9 @@ void intgrid_print_info(intgrid const g, int const cell_padding)
 {
     assert(g.width > 0);
     usize const height = intgrid_height(g);
-    for (i64 row = 0; row < (i64)height; ++row)
+    for (usize row = 0; row < height; ++row)
     {
-        for (i64 col = 0; col < (i64)g.width; ++col)
+        for (usize col = 0; col < g.width; ++col)
         {
             i64 val;
             expect(intgrid_get(g, row, col, &val));
@@ -152,7 +152,7 @@ void intgrid_print_info(intgrid const g, int const cell_padding)
 }
 
 bool intgrid_add(
-    intgrid const g, i64 const row, i64 const col, i64 const addition
+    intgrid const g, usize const row, usize const col, i64 const addition
 )
 {
     i64 prev;
