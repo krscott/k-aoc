@@ -53,14 +53,13 @@ nodiscard usize grid_m(height)(grid const g)
 }
 
 nodiscard bool
-grid_m(at)(grid const g, i64 const row, i64 const col, grid_T **const out)
+grid_m(at)(grid const g, usize const row, usize const col, grid_T **const out)
 {
-    bool const in_bounds = 0 <= row && row < (i64)grid_m(height)(g) &&
-                           0 <= col && col < (i64)g.width;
+    bool const in_bounds = row < grid_m(height)(g) && col < g.width;
 
     if (in_bounds)
     {
-        i64 const idx = row * (i64)g.width + col;
+        usize const idx = row * g.width + col;
         *out = &g.buf.ptr[idx];
     }
 
@@ -68,7 +67,7 @@ grid_m(at)(grid const g, i64 const row, i64 const col, grid_T **const out)
 }
 
 nodiscard bool
-grid_m(get)(grid const g, i64 const row, i64 const col, grid_T *const out)
+grid_m(get)(grid const g, usize const row, usize const col, grid_T *const out)
 {
     grid_T *ch;
     bool const in_bounds = grid_m(at)(g, row, col, &ch);
@@ -80,7 +79,7 @@ grid_m(get)(grid const g, i64 const row, i64 const col, grid_T *const out)
 }
 
 nodiscard bool
-grid_m(set)(grid const g, i64 const row, i64 const col, grid_T const value)
+grid_m(set)(grid const g, usize const row, usize const col, grid_T const value)
 {
     grid_T *ch;
     bool const in_bounds = grid_m(at)(g, row, col, &ch);
@@ -93,7 +92,7 @@ grid_m(set)(grid const g, i64 const row, i64 const col, grid_T const value)
 
 #ifdef grid_T_eq
 nodiscard bool grid_m(find)(
-    grid const g, grid_T const value, i64 *const out_row, i64 *const out_col
+    grid const g, grid_T const value, usize *const out_row, usize *const out_col
 )
 {
     assert(g.width > 0);
@@ -104,11 +103,11 @@ nodiscard bool grid_m(find)(
     {
         if (out_row)
         {
-            *out_row = (i64)(idx / g.width);
+            *out_row = idx / g.width;
         }
         if (out_col)
         {
-            *out_col = (i64)(idx % g.width);
+            *out_col = idx % g.width;
         }
     }
     return found;
