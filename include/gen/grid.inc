@@ -66,8 +66,9 @@ grid_m(at)(grid const g, usize const row, usize const col, grid_T **const out)
     return in_bounds;
 }
 
-nodiscard bool
-grid_m(get)(grid const g, usize const row, usize const col, grid_T *const out)
+nodiscard bool grid_m(get_checked)(
+    grid const g, usize const row, usize const col, grid_T *const out
+)
 {
     grid_T *ch;
     bool const in_bounds = grid_m(at)(g, row, col, &ch);
@@ -78,8 +79,16 @@ grid_m(get)(grid const g, usize const row, usize const col, grid_T *const out)
     return in_bounds;
 }
 
-nodiscard bool
-grid_m(set)(grid const g, usize const row, usize const col, grid_T const value)
+nodiscard grid_T grid_m(get)(grid const g, usize const row, usize const col)
+{
+    grid_T out;
+    expect(grid_m(get_checked)(g, row, col, &out));
+    return out;
+}
+
+nodiscard bool grid_m(set_checked)(
+    grid const g, usize const row, usize const col, grid_T const value
+)
 {
     grid_T *ch;
     bool const in_bounds = grid_m(at)(g, row, col, &ch);
@@ -88,6 +97,13 @@ grid_m(set)(grid const g, usize const row, usize const col, grid_T const value)
         *ch = value;
     }
     return in_bounds;
+}
+
+void grid_m(set)(
+    grid const g, usize const row, usize const col, grid_T const value
+)
+{
+    expect(grid_m(set_checked)(g, row, col, value));
 }
 
 #ifdef grid_T_eq
