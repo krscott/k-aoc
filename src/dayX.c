@@ -4,6 +4,8 @@
 #include <assert.h>
 #include <stdio.h>
 
+i64 dayX(FILE *input, bool b);
+
 i64 dayX(FILE *const input, bool const b)
 {
     (void)b;

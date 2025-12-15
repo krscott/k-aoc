@@ -38,8 +38,6 @@ i64 day23(FILE *input, bool b);
 i64 day24(FILE *input, bool b);
 i64 day25(FILE *input, bool b);
 
-i64 dayX(FILE *input, bool b);
-
 nodiscard bool
 append_stream_until(strbuf *const buf, FILE *const stream, char const delim);
 nodiscard bool get_split(strbuf *buf, FILE *stream, char delim);
