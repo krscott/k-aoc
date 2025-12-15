@@ -78,7 +78,6 @@ i64 day02_sum_invalid(i64 const start, i64 const end, bool const b)
 
 i64 day02(FILE *input, bool b)
 {
-    (void)b;
     i64 acc = 0;
 
     strbuf range = strbuf_init();

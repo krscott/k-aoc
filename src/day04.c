@@ -56,7 +56,7 @@ static i64 take_rolls(chargrid *const g)
                     if (count < 4)
                     {
                         ++total;
-                        (void)chargrid_set(*g, row, col, 'x');
+                        expect(chargrid_set(*g, row, col, 'x'));
                     }
                 }
             }
@@ -71,7 +71,7 @@ static i64 take_rolls(chargrid *const g)
             char ch = '?';
             if (chargrid_get(*g, row, col, &ch) && ch == 'x')
             {
-                (void)chargrid_set(*g, row, col, '.');
+                expect(chargrid_set(*g, row, col, '.'));
             }
             infof("%c", ch);
         }

@@ -5,8 +5,6 @@
 
 i64 day07(FILE *const input, bool const b)
 {
-    (void)b;
-
     defer(chargrid_deinit) chargrid chars = chargrid_init();
     chargrid_read_stream(&chars, input);
     usize const height = chargrid_height(chars);
