@@ -52,8 +52,9 @@ nodiscard usize grid_m(height)(grid const g)
     return g.buf.len / g.width;
 }
 
-nodiscard bool
-grid_m(at)(grid const g, usize const row, usize const col, grid_T **const out)
+nodiscard bool grid_m(at_checked)(
+    grid const g, usize const row, usize const col, grid_T **const out
+)
 {
     bool const in_bounds = row < grid_m(height)(g) && col < g.width;
 
@@ -66,12 +67,19 @@ grid_m(at)(grid const g, usize const row, usize const col, grid_T **const out)
     return in_bounds;
 }
 
+nodiscard grid_T *grid_m(at)(grid const g, usize const row, usize const col)
+{
+    grid_T *ptr;
+    expect(grid_m(at_checked)(g, row, col, &ptr));
+    return ptr;
+}
+
 nodiscard bool grid_m(get_checked)(
     grid const g, usize const row, usize const col, grid_T *const out
 )
 {
     grid_T *ch;
-    bool const in_bounds = grid_m(at)(g, row, col, &ch);
+    bool const in_bounds = grid_m(at_checked)(g, row, col, &ch);
     if (in_bounds)
     {
         *out = *ch;
@@ -91,7 +99,7 @@ nodiscard bool grid_m(set_checked)(
 )
 {
     grid_T *ch;
-    bool const in_bounds = grid_m(at)(g, row, col, &ch);
+    bool const in_bounds = grid_m(at_checked)(g, row, col, &ch);
     if (in_bounds)
     {
         *ch = value;

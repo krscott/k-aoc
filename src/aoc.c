@@ -114,9 +114,7 @@ void chargrid_print_info(chargrid const g)
     usize const height = chargrid_height(g);
     for (usize row = 0; row < height; ++row)
     {
-        char *ptr;
-        expect(chargrid_at(g, row, 0, &ptr));
-        infof("%.*s\n", (int)g.width, ptr);
+        infof("%.*s\n", (int)g.width, chargrid_at(g, row, 0));
     }
 }
 
