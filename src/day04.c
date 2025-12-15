@@ -16,7 +16,7 @@ static usize chargrid_count_surrounding(
             if (dr != 0 || dc != 0)
             {
                 char ch;
-                if (chargrid_get(
+                if (chargrid_get_checked(
                         g,
                         (usize)((isize)row + dr),
                         (usize)((isize)col + dc),
@@ -45,7 +45,7 @@ static i64 take_rolls(chargrid *const g)
         {
             char ch = '?';
 
-            if (chargrid_get(*g, row, col, &ch))
+            if (chargrid_get_checked(*g, row, col, &ch))
             {
                 if (ch == '@')
                 {
@@ -56,7 +56,7 @@ static i64 take_rolls(chargrid *const g)
                     if (count < 4)
                     {
                         ++total;
-                        expect(chargrid_set(*g, row, col, 'x'));
+                        chargrid_set(*g, row, col, 'x');
                     }
                 }
             }
@@ -69,9 +69,9 @@ static i64 take_rolls(chargrid *const g)
         for (usize col = 0; col < g->width; ++col)
         {
             char ch = '?';
-            if (chargrid_get(*g, row, col, &ch) && ch == 'x')
+            if (chargrid_get_checked(*g, row, col, &ch) && ch == 'x')
             {
-                expect(chargrid_set(*g, row, col, '.'));
+                chargrid_set(*g, row, col, '.');
             }
             infof("%c", ch);
         }

@@ -136,8 +136,7 @@ void intgrid_print_info(intgrid const g, int const cell_padding)
     {
         for (usize col = 0; col < g.width; ++col)
         {
-            i64 val;
-            expect(intgrid_get(g, row, col, &val));
+            i64 val = intgrid_get(g, row, col);
             if (val == 0)
             {
                 infof("%*c ", cell_padding, ' ');
@@ -151,15 +150,10 @@ void intgrid_print_info(intgrid const g, int const cell_padding)
     }
 }
 
-bool intgrid_add(
+void intgrid_add(
     intgrid const g, usize const row, usize const col, i64 const addition
 )
 {
-    i64 prev;
-    bool const ok = intgrid_get(g, row, col, &prev);
-    if (ok)
-    {
-        expect(intgrid_set(g, row, col, prev + addition));
-    }
-    return ok;
+    i64 const prev = intgrid_get(g, row, col);
+    intgrid_set(g, row, col, prev + addition);
 }

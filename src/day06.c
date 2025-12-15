@@ -10,7 +10,7 @@ static i64 calculate_column(intgrid g, usize col, char op)
     for (usize row = 0; row < intgrid_height(g); ++row)
     {
         i64 value;
-        if (intgrid_get(g, row, col, &value))
+        if (intgrid_get_checked(g, row, col, &value))
         {
             if (op == '*')
             {
@@ -77,7 +77,7 @@ cephalopod_math(chargrid chars, usize op_row, usize op_col, bool mult)
 
         for (usize row = 0; row < op_row; ++row)
         {
-            if (chargrid_get(chars, row, col, &ch))
+            if (chargrid_get_checked(chars, row, col, &ch))
             {
                 if ('0' <= ch && ch <= '9')
                 {
@@ -118,7 +118,7 @@ static i64 day06b(FILE *const input)
 
     usize const op_row = chargrid_height(chars) - 1;
     char op;
-    for (usize col = 0; chargrid_get(chars, op_row, col, &op); ++col)
+    for (usize col = 0; chargrid_get_checked(chars, op_row, col, &op); ++col)
     {
         if (op == '*' || op == '+')
         {

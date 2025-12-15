@@ -1,6 +1,8 @@
 #ifndef AOC_MACROS_H_
 #define AOC_MACROS_H_
 
+#include <stdio.h> // IWYU pragma: export
+
 #if defined(__GNUC__) || defined(__clang__)
 #define nodiscard __attribute__((warn_unused_result))
 #else
