@@ -66,7 +66,8 @@ nodiscard
 void grid_m(deinit)(grid *grid);
 void grid_m(push)(grid *g, grid_T value);
 nodiscard usize grid_m(height)(grid g);
-nodiscard bool grid_m(at)(grid g, usize row, usize col, grid_T **out);
+nodiscard grid_T *grid_m(at)(grid g, usize row, usize col);
+nodiscard bool grid_m(at_checked)(grid g, usize row, usize col, grid_T **out);
 nodiscard bool grid_m(get_checked)(grid g, usize row, usize col, grid_T *out);
 nodiscard grid_T grid_m(get)(grid g, usize row, usize col);
 nodiscard bool grid_m(set_checked)(grid g, usize row, usize col, grid_T value);
