@@ -13,7 +13,8 @@ typedef struct
     i64 y;
     i64 z;
 } vec3;
-#define vec3_fmt(v) "%ld,%ld,%ld", (v).x, (v).y, (v).z
+#define vec3_fmts "%ld,%ld,%ld"
+#define vec3_fmtv(v) (v).x, (v).y, (v).z
 
 static nodiscard bool vec3_from_str(str s, vec3 *const out)
 {
@@ -114,8 +115,8 @@ static i64 connect(state const s)
     chargrid_set(*s.connections, brk_a, brk_b, 'x');
     // chargrid_set(*s.connections, brk_b, brk_a, 'o');
 
-    infof("Connected " vec3_fmt(s.breaker_positions[brk_a]));
-    infof(" <-> " vec3_fmt(s.breaker_positions[brk_b]));
+    infof("Connected " vec3_fmts, vec3_fmtv(s.breaker_positions[brk_a]));
+    infof(" <-> " vec3_fmts, vec3_fmtv(s.breaker_positions[brk_b]));
 
     i64 const cir_a = s.breaker_circuits[brk_a];
     i64 const cir_b = s.breaker_circuits[brk_b];
