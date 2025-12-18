@@ -4,7 +4,8 @@
 #include <assert.h>
 #include <stdio.h>
 
-static i64 calculate_column(intgrid g, usize col, char op)
+static i64
+calculate_column(intgrid const *const g, usize const col, char const op)
 {
     i64 acc = op == '*' ? 1 : 0;
     for (usize row = 0; row < intgrid_height(g); ++row)
@@ -50,7 +51,7 @@ static i64 day06a(FILE *const input)
             {
                 // op
                 infof("%4c ", head.ptr[0]);
-                acc += calculate_column(numbers, col, head.ptr[0]);
+                acc += calculate_column(&numbers, col, head.ptr[0]);
             }
         }
 
@@ -77,7 +78,7 @@ cephalopod_math(chargrid chars, usize op_row, usize op_col, bool mult)
 
         for (usize row = 0; row < op_row; ++row)
         {
-            if (chargrid_get_checked(chars, row, col, &ch))
+            if (chargrid_get_checked(&chars, row, col, &ch))
             {
                 if ('0' <= ch && ch <= '9')
                 {
@@ -116,9 +117,9 @@ static i64 day06b(FILE *const input)
 
     i64 acc = 0;
 
-    usize const op_row = chargrid_height(chars) - 1;
+    usize const op_row = chargrid_height(&chars) - 1;
     char op;
-    for (usize col = 0; chargrid_get_checked(chars, op_row, col, &op); ++col)
+    for (usize col = 0; chargrid_get_checked(&chars, op_row, col, &op); ++col)
     {
         if (op == '*' || op == '+')
         {

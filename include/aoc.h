@@ -56,7 +56,7 @@ static inline i64 modulo(i64 x, i64 y)
 #include "gen/grid.h"
 #undef grid
 void chargrid_read_stream(chargrid *g, FILE *input);
-void chargrid_print_info(chargrid g);
+void chargrid_print_info(chargrid const *g);
 
 #define intlist__type i64
 #define intlist__infallible_allocator true
@@ -68,8 +68,8 @@ void chargrid_print_info(chargrid g);
 #define grid intgrid
 #include "gen/grid.h"
 #undef grid
-void intgrid_print_info(intgrid g, int cell_padding);
-void intgrid_add(intgrid g, usize row, usize col, i64 addition);
+void intgrid_print_info(intgrid const *g, int cell_padding);
+void intgrid_add(intgrid const *g, usize row, usize col, i64 addition);
 
 // Globals
 

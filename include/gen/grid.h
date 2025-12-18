@@ -65,17 +65,20 @@ nodiscard
     grid grid_m(init_height_width)(usize height, usize width, grid_T fill);
 void grid_m(deinit)(grid *grid);
 void grid_m(push)(grid *g, grid_T value);
-nodiscard usize grid_m(height)(grid g);
-nodiscard grid_T *grid_m(at)(grid g, usize row, usize col);
-nodiscard bool grid_m(at_checked)(grid g, usize row, usize col, grid_T **out);
-nodiscard bool grid_m(get_checked)(grid g, usize row, usize col, grid_T *out);
-nodiscard grid_T grid_m(get)(grid g, usize row, usize col);
-nodiscard bool grid_m(set_checked)(grid g, usize row, usize col, grid_T value);
-void grid_m(set)(grid g, usize row, usize col, grid_T value);
+nodiscard usize grid_m(height)(grid const *g);
+nodiscard grid_T *grid_m(at)(grid const *g, usize row, usize col);
+nodiscard bool
+    grid_m(at_checked)(grid const *g, usize row, usize col, grid_T **out);
+nodiscard bool
+    grid_m(get_checked)(grid const *g, usize row, usize col, grid_T *out);
+nodiscard grid_T grid_m(get)(grid const *g, usize row, usize col);
+nodiscard bool
+    grid_m(set_checked)(grid const *g, usize row, usize col, grid_T value);
+void grid_m(set)(grid const *g, usize row, usize col, grid_T value);
 
 #ifdef grid_T_eq
 nodiscard bool
-    grid_m(find)(grid g, grid_T value, usize *out_row, usize *out_col);
+    grid_m(find)(grid const *g, grid_T value, usize *out_row, usize *out_col);
 #endif
 
 #endif // KTL_INC
