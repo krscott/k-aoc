@@ -56,8 +56,17 @@ typedef struct
 
 static int connection_cmp_shortest(void const *a, void const *b)
 {
-    return (int)((connection const *)a)->dist_sq -
-           (int)((connection const *)b)->dist_sq;
+    i64 const dist_a = ((connection const *)a)->dist_sq;
+    i64 const dist_b = ((connection const *)b)->dist_sq;
+    if (dist_a < dist_b)
+    {
+        return -1;
+    }
+    if (dist_a > dist_b)
+    {
+        return 1;
+    }
+    return 0;
 }
 
 #define cxnlist__type connection
@@ -116,6 +125,12 @@ static usize make_connections(state const s, usize n)
 
         infof("Connected " vec3_fmts, vec3_fmtv(s.breaker_positions[brk_a]));
         infof(" <-> " vec3_fmts, vec3_fmtv(s.breaker_positions[brk_b]));
+
+        i64 const dist_sq = vec3_dist_sq(
+            s.breaker_positions[brk_a],
+            s.breaker_positions[brk_b]
+        );
+        infof(" dist=%ld", dist_sq);
 
         i64 const cir_a = s.breaker_circuits[brk_a];
         i64 const cir_b = s.breaker_circuits[brk_b];
@@ -197,6 +212,22 @@ i64 day08(FILE *const input, bool const b)
     }
 
     cxnlist_sort_by(connections, connection_cmp_shortest);
+    for (usize i = 1; i < connections.len; ++i)
+    {
+        if (connections.ptr[i - 1].dist_sq > connections.ptr[i].dist_sq)
+        {
+            panicf(
+                "sort failed at %zu: %ld > %ld cmp=%d",
+                i,
+                connections.ptr[i - 1].dist_sq,
+                connections.ptr[i].dist_sq,
+                connection_cmp_shortest(
+                    &connections.ptr[i - 1],
+                    &connections.ptr[i]
+                )
+            );
+        }
+    }
 
     assert(breaker_positions.len == breaker_circuits.len);
     assert(breaker_positions.len == circuit_sizes.len);
