@@ -5,8 +5,6 @@
 #include <assert.h>
 #include <stdio.h>
 
-#define DISCONNECTED '.'
-
 typedef struct
 {
     i64 x;
@@ -51,11 +49,33 @@ static inline nodiscard i64 vec3_dist_sq(vec3 const a, vec3 const b)
 
 typedef struct
 {
+    u32 a;
+    u32 b;
+    i64 dist_sq;
+} connection;
+
+static int connection_cmp_shortest(void const *a, void const *b)
+{
+    return (int)((connection const *)a)->dist_sq -
+           (int)((connection const *)b)->dist_sq;
+}
+
+#define cxnlist__type connection
+#define cxnlist__mut true
+#define cxnlist__infallible_allocator true
+#define ktl_vec cxnlist
+#include "ktl/struct/vec.h"
+#include "ktl/struct/vec.inc"
+#undef ktl_vec
+
+typedef struct
+{
     usize len;
     vec3 *breaker_positions;
     i64 *breaker_circuits;
     i64 *circuit_sizes;
-    chargrid *connections;
+    cxnlist *connections;
+
 } state;
 
 static void state_print_info(state const s)
@@ -84,79 +104,55 @@ static i64 state_mult_3_largest(state const s)
     return tmp.ptr[tmp.len - 1] * tmp.ptr[tmp.len - 2] * tmp.ptr[tmp.len - 3];
 }
 
-static i64 connect(state const s)
+static usize make_connections(state const s, usize n)
 {
-    // Find shortest length of unconnected breaker boxes
-    i64 min_dist_sq = -1;
-    usize brk_a = 0;
-    usize brk_b = 0;
-    for (usize i = 0; i < s.len - 1; ++i)
-    {
-        for (usize j = i + 1; j < s.len; ++j)
-        {
-            if (DISCONNECTED == chargrid_get(s.connections, i, j))
-            {
-                i64 dist_sq = vec3_dist_sq(
-                    s.breaker_positions[i],
-                    s.breaker_positions[j]
-                );
+    assert(n <= s.connections->len);
 
-                if (min_dist_sq == -1 || dist_sq < min_dist_sq)
+    usize i = 0;
+    for (; i < n; ++i)
+    {
+        usize const brk_a = (usize)s.connections->ptr[i].a;
+        usize const brk_b = (usize)s.connections->ptr[i].b;
+
+        infof("Connected " vec3_fmts, vec3_fmtv(s.breaker_positions[brk_a]));
+        infof(" <-> " vec3_fmts, vec3_fmtv(s.breaker_positions[brk_b]));
+
+        i64 const cir_a = s.breaker_circuits[brk_a];
+        i64 const cir_b = s.breaker_circuits[brk_b];
+
+        if (cir_a != cir_b)
+        {
+            // Move breakers on circuit B to circuit A
+            for (usize j = 0; j < s.len; ++j)
+            {
+                if (s.breaker_circuits[j] == cir_b)
                 {
-                    min_dist_sq = dist_sq;
-                    brk_a = i;
-                    brk_b = j;
+                    s.breaker_circuits[j] = cir_a;
                 }
             }
-        }
-    }
-    expect(min_dist_sq > 0);
 
-    chargrid_set(s.connections, brk_a, brk_b, 'x');
-    // chargrid_set(*s.connections, brk_b, brk_a, 'o');
+            // Update circuit sizes
+            s.circuit_sizes[cir_a] += s.circuit_sizes[cir_b];
+            s.circuit_sizes[cir_b] = 0;
 
-    infof("Connected " vec3_fmts, vec3_fmtv(s.breaker_positions[brk_a]));
-    infof(" <-> " vec3_fmts, vec3_fmtv(s.breaker_positions[brk_b]));
+            infof(" (%ld)\n", s.circuit_sizes[cir_a]);
 
-    i64 const cir_a = s.breaker_circuits[brk_a];
-    i64 const cir_b = s.breaker_circuits[brk_b];
-
-    if (cir_a != cir_b)
-    {
-        // Move breakers on circuit B to circuit A
-        for (usize i = 0; i < s.len; ++i)
-        {
-            if (s.breaker_circuits[i] == cir_b)
+            if (s.circuit_sizes[cir_a] >= (i64)s.len)
             {
-                s.breaker_circuits[i] = cir_a;
+                break;
             }
         }
-
-        // Update circuit sizes
-        s.circuit_sizes[cir_a] += s.circuit_sizes[cir_b];
-        s.circuit_sizes[cir_b] = 0;
-
-        infof(" (%ld)", s.circuit_sizes[cir_a]);
+        else
+        {
+            infof(" (redundant)\n");
+        }
     }
-    else
-    {
-        infof(" (redundant)");
-    }
-    infof("\n");
 
-    i64 out = 0;
-    // HACK
-    if (s.circuit_sizes[cir_a] == (i64)s.len)
-    {
-        out = s.breaker_positions[brk_a].x * s.breaker_positions[brk_b].x;
-    }
-    return out;
+    return i;
 }
 
 i64 day08(FILE *const input, bool const b)
 {
-    (void)b;
-
     defer(strbuf_deinit) strbuf line = strbuf_init();
     defer(vec3list_deinit) vec3list breaker_positions = vec3list_init();
 
@@ -177,11 +173,30 @@ i64 day08(FILE *const input, bool const b)
         intlist_push(&circuit_sizes, 1);
     }
 
-    defer(chargrid_deinit) chargrid connections = chargrid_init_height_width(
-        breaker_positions.len,
-        breaker_positions.len,
-        DISCONNECTED
+    defer(cxnlist_deinit) cxnlist connections = cxnlist_init();
+    cxnlist_reserve(
+        &connections,
+        breaker_positions.len * breaker_positions.len
     );
+    for (u32 i = 0; i < breaker_positions.len - 1; ++i)
+    {
+        for (u32 j = i + 1; j < breaker_positions.len; ++j)
+        {
+            cxnlist_push(
+                &connections,
+                (connection){
+                    .a = i,
+                    .b = j,
+                    .dist_sq = vec3_dist_sq(
+                        breaker_positions.ptr[i],
+                        breaker_positions.ptr[j]
+                    ),
+                }
+            );
+        }
+    }
+
+    cxnlist_sort_by(connections, connection_cmp_shortest);
 
     assert(breaker_positions.len == breaker_circuits.len);
     assert(breaker_positions.len == circuit_sizes.len);
@@ -201,23 +216,21 @@ i64 day08(FILE *const input, bool const b)
         // Example uses fewer connections
         usize const connection_count = s.len < 1000 ? 10 : 1000;
 
-        for (usize i = 0; i < connection_count; ++i)
-        {
-            expect(0 == connect(s));
-            infof("ans = %ld\n", state_mult_3_largest(s));
-        }
-        // chargrid_print_info(connections);
-        state_print_info(s);
+        (void)make_connections(s, connection_count);
 
         acc = state_mult_3_largest(s);
     }
     else
     {
-        do
-        {
-            acc = connect(s);
-        } while (acc == 0);
+        usize const last = make_connections(s, s.connections->len);
+
+        usize const last_a = connections.ptr[last].a;
+        usize const last_b = connections.ptr[last].b;
+
+        acc = breaker_positions.ptr[last_a].x * breaker_positions.ptr[last_b].x;
     }
+
+    state_print_info(s);
 
     return acc;
 }
