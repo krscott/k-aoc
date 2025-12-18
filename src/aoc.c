@@ -108,13 +108,13 @@ void chargrid_read_stream(chargrid *const g, FILE *const input)
     }
 }
 
-void chargrid_print_info(chargrid const g)
+void chargrid_print_info(chargrid const *const g)
 {
-    assert(g.width > 0);
+    assert(g->width > 0);
     usize const height = chargrid_height(g);
     for (usize row = 0; row < height; ++row)
     {
-        infof("%.*s\n", (int)g.width, chargrid_at(g, row, 0));
+        infof("%.*s\n", (int)g->width, chargrid_at(g, row, 0));
     }
 }
 
@@ -126,13 +126,13 @@ void chargrid_print_info(chargrid const g)
 #include "gen/grid.inc"
 #undef grid
 
-void intgrid_print_info(intgrid const g, int const cell_padding)
+void intgrid_print_info(intgrid const *const g, int const cell_padding)
 {
-    assert(g.width > 0);
+    assert(g->width > 0);
     usize const height = intgrid_height(g);
     for (usize row = 0; row < height; ++row)
     {
-        for (usize col = 0; col < g.width; ++col)
+        for (usize col = 0; col < g->width; ++col)
         {
             i64 val = intgrid_get(g, row, col);
             if (val == 0)
@@ -149,7 +149,7 @@ void intgrid_print_info(intgrid const g, int const cell_padding)
 }
 
 void intgrid_add(
-    intgrid const g, usize const row, usize const col, i64 const addition
+    intgrid const *const g, usize const row, usize const col, i64 const addition
 )
 {
     i64 const prev = intgrid_get(g, row, col);

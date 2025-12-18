@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 static usize chargrid_count_surrounding(
-    chargrid const g, usize const row, usize const col, char const match
+    chargrid const *const g, usize const row, usize const col, char const match
 )
 {
     usize count = 0;
@@ -36,7 +36,7 @@ static usize chargrid_count_surrounding(
 static i64 take_rolls(chargrid *const g)
 {
     i64 total = 0;
-    usize const height = chargrid_height(*g);
+    usize const height = chargrid_height(g);
 
     // Mark
     for (usize row = 0; row < height; ++row)
@@ -45,18 +45,17 @@ static i64 take_rolls(chargrid *const g)
         {
             char ch = '?';
 
-            if (chargrid_get_checked(*g, row, col, &ch))
+            if (chargrid_get_checked(g, row, col, &ch))
             {
                 if (ch == '@')
                 {
-                    usize count =
-                        chargrid_count_surrounding(*g, row, col, '@') +
-                        chargrid_count_surrounding(*g, row, col, 'x');
+                    usize count = chargrid_count_surrounding(g, row, col, '@') +
+                                  chargrid_count_surrounding(g, row, col, 'x');
 
                     if (count < 4)
                     {
                         ++total;
-                        chargrid_set(*g, row, col, 'x');
+                        chargrid_set(g, row, col, 'x');
                     }
                 }
             }
@@ -69,9 +68,9 @@ static i64 take_rolls(chargrid *const g)
         for (usize col = 0; col < g->width; ++col)
         {
             char ch = '?';
-            if (chargrid_get_checked(*g, row, col, &ch) && ch == 'x')
+            if (chargrid_get_checked(g, row, col, &ch) && ch == 'x')
             {
-                chargrid_set(*g, row, col, '.');
+                chargrid_set(g, row, col, '.');
             }
             infof("%c", ch);
         }

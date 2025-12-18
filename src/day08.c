@@ -94,7 +94,7 @@ static i64 connect(state const s)
     {
         for (usize j = i + 1; j < s.len; ++j)
         {
-            if (DISCONNECTED == chargrid_get(*s.connections, i, j))
+            if (DISCONNECTED == chargrid_get(s.connections, i, j))
             {
                 i64 dist_sq = vec3_dist_sq(
                     s.breaker_positions[i],
@@ -112,7 +112,7 @@ static i64 connect(state const s)
     }
     expect(min_dist_sq > 0);
 
-    chargrid_set(*s.connections, brk_a, brk_b, 'x');
+    chargrid_set(s.connections, brk_a, brk_b, 'x');
     // chargrid_set(*s.connections, brk_b, brk_a, 'o');
 
     infof("Connected " vec3_fmts, vec3_fmtv(s.breaker_positions[brk_a]));
