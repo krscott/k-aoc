@@ -287,11 +287,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1765805363,
-        "narHash": "sha256-lPFLaTgOjeqSpP1YSDwqvpAdWZlIV80BDwKhczYQvtE=",
+        "lastModified": 1766074500,
+        "narHash": "sha256-epSJHNMTe0TtfoBfVse/gJHQ/PjGeY5Fz0iA/9mcLBc=",
         "owner": "krscott",
         "repo": "ktl",
-        "rev": "71694d8f004b4ae570f4eed1a4eebb3e9c1543c1",
+        "rev": "3e41d4830f59576cbf5fe2159e5cf9170a26e41e",
         "type": "github"
       },
       "original": {
