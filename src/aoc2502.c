@@ -33,7 +33,7 @@ static bool is_repeating_n(char const *const s, int const n, int const div)
     return true;
 }
 
-static bool is_repeating(i64 const x, bool const b)
+static bool is_repeating(i64 const x)
 {
     char s[30] = {0};
 
@@ -41,7 +41,7 @@ static bool is_repeating(i64 const x, bool const b)
 
     bool out = false;
 
-    if (!b)
+    if (PART_1)
     {
         out = is_repeating_n(s, n, 2);
     }
@@ -61,13 +61,13 @@ static bool is_repeating(i64 const x, bool const b)
     return out;
 }
 
-i64 day02_sum_invalid(i64 const start, i64 const end, bool const b)
+static i64 day02_sum_invalid(i64 const start, i64 const end)
 {
     i64 acc = 0;
 
     for (i64 x = start; x <= end; ++x)
     {
-        if (is_repeating(x, b))
+        if (is_repeating(x))
         {
             acc += x;
         }
@@ -76,13 +76,13 @@ i64 day02_sum_invalid(i64 const start, i64 const end, bool const b)
     return acc;
 }
 
-i64 day02(FILE *input, bool b)
+int main(void)
 {
     i64 acc = 0;
 
     strbuf range = strbuf_init();
 
-    while (get_split(&range, input, ','))
+    while (get_split(&range, stdin, ','))
     {
 
         str start_s, end_s;
@@ -99,11 +99,12 @@ i64 day02(FILE *input, bool b)
 
         infof("%ld-%ld:", start, end);
 
-        acc += day02_sum_invalid(start, end, b);
+        acc += day02_sum_invalid(start, end);
 
         infof("\n");
     }
 
     strbuf_deinit(&range);
-    return acc;
+
+    output(acc);
 }

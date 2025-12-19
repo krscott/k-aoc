@@ -3,7 +3,6 @@
 
 #include <assert.h>
 #include <stddef.h>
-#include <stdio.h>
 
 static usize max_char_idx(str s)
 {
@@ -37,16 +36,16 @@ static i64 next_digit(str *const s, usize *const remaining)
     return digit;
 }
 
-i64 day03(FILE *const input, bool const b)
+int main(void)
 {
     strbuf line = strbuf_init();
 
     i64 acc = 0;
 
-    while (get_line(&line, input) && line.len > 1)
+    while (get_line(&line, stdin) && line.len > 1)
     {
         str s = strbuf_as_str(line);
-        usize remaining = b ? 12 : 2;
+        usize remaining = PART_2 ? 12 : 2;
         i64 joltage = 0;
 
         while (remaining > 0)
@@ -61,5 +60,5 @@ i64 day03(FILE *const input, bool const b)
 
     strbuf_deinit(&line);
 
-    return acc;
+    output(acc);
 }

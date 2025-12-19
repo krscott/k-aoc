@@ -188,7 +188,7 @@ static i64 day05b(FILE *const input)
     return acc;
 }
 
-i64 day05(FILE *const input, bool const b)
+int main(void)
 {
-    return b ? day05b(input) : day05a(input);
+    output(PART_2 ? day05b(stdin) : day05a(stdin));
 }

@@ -18,32 +18,4 @@ KTEST_MAIN
         ASSERT_INT_EQ(modulo(-130, 100), 70);
         ASSERT_INT_EQ(modulo(-200, 100), 0);
     }
-
-    KTEST(t_day01_count_hits)
-    {
-        ASSERT_INT_EQ(day01_count_hits(50, 0), 0);
-        ASSERT_INT_EQ(day01_count_hits(50, 50), 1);
-        ASSERT_INT_EQ(day01_count_hits(50, 150), 2);
-
-        ASSERT_INT_EQ(day01_count_hits(0, 1), 0);
-        ASSERT_INT_EQ(day01_count_hits(0, 100), 1);
-        ASSERT_INT_EQ(day01_count_hits(0, 150), 1);
-        ASSERT_INT_EQ(day01_count_hits(0, 200), 2);
-
-        ASSERT_INT_EQ(day01_count_hits(50, -50), 1);
-        ASSERT_INT_EQ(day01_count_hits(50, -100), 1);
-        ASSERT_INT_EQ(day01_count_hits(50, -150), 2);
-        ASSERT_INT_EQ(day01_count_hits(50, -200), 2);
-
-        ASSERT_INT_EQ(day01_count_hits(0, -1), 0);
-        ASSERT_INT_EQ(day01_count_hits(0, -100), 1);
-        ASSERT_INT_EQ(day01_count_hits(0, -150), 1);
-        ASSERT_INT_EQ(day01_count_hits(0, -200), 2);
-    }
-
-    KTEST(t_day02_count_invalid)
-    {
-        ASSERT_INT_EQ(day02_sum_invalid(11, 22, false), 11 + 22);
-        ASSERT_INT_EQ(day02_sum_invalid(95, 115, false), 99);
-    }
 }

@@ -132,7 +132,7 @@ static i64 day06b(FILE *const input)
     return acc;
 }
 
-i64 day06(FILE *const input, bool const b)
+int main(void)
 {
-    return b ? day06b(input) : day06a(input);
+    output(PART_2 ? day06b(stdin) : day06a(stdin));
 }

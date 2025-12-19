@@ -49,11 +49,12 @@ else()
   message("Release build")
   # set(CMAKE_UNITY_BUILD ON)
 
-  add_compile_options(-Os)
+  add_compile_options(-O3)
+  add_compile_options(-DQUIET)
 endif()
 
 add_subdirectory(src)
-add_subdirectory(app)
+# add_subdirectory(app)
 
 enable_testing()
 add_subdirectory(test)

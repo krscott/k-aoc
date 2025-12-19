@@ -1,7 +1,6 @@
 #include "aoc.h"
 
 #include <assert.h>
-#include <stdio.h>
 
 static usize chargrid_count_surrounding(
     chargrid const *const g, usize const row, usize const col, char const match
@@ -81,10 +80,10 @@ static i64 take_rolls(chargrid *const g)
     return total;
 }
 
-i64 day04(FILE *const input, bool const b)
+int main(void)
 {
     defer(chargrid_deinit) chargrid g = chargrid_init();
-    chargrid_read_stream(&g, input);
+    chargrid_read_stream(&g, stdin);
 
     i64 taken = 0;
     i64 acc = 0;
@@ -93,7 +92,7 @@ i64 day04(FILE *const input, bool const b)
     {
         taken = take_rolls(&g);
         acc += taken;
-    } while (b && taken > 0);
+    } while (PART_2 && taken > 0);
 
-    return acc;
+    output(acc);
 }

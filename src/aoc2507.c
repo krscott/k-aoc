@@ -1,17 +1,16 @@
 #include "aoc.h"
 
 #include <assert.h>
-#include <stdio.h>
 
-i64 day07(FILE *const input, bool const b)
+int main(void)
 {
     defer(chargrid_deinit) chargrid chars = chargrid_init();
-    chargrid_read_stream(&chars, input);
+    chargrid_read_stream(&chars, stdin);
     usize const height = chargrid_height(&chars);
 
     defer(intgrid_deinit) intgrid timelines =
         intgrid_init_height_width(height, chars.width, 0);
-    chargrid_read_stream(&chars, input);
+    chargrid_read_stream(&chars, stdin);
 
     i64 acc = 0;
 
@@ -39,7 +38,7 @@ i64 day07(FILE *const input, bool const b)
                     intgrid_add(&timelines, row, col - 1, above_timelines);
                     intgrid_add(&timelines, row, col + 1, above_timelines);
 
-                    if (!b)
+                    if (PART_1)
                     {
                         ++acc;
                     }
@@ -53,7 +52,7 @@ i64 day07(FILE *const input, bool const b)
         }
     }
 
-    if (b)
+    if (PART_2)
     {
         for (usize col = 0; col < chars.width; ++col)
         {
@@ -67,5 +66,5 @@ i64 day07(FILE *const input, bool const b)
     //     intgrid_print_info(timelines, 2);
     // }
 
-    return acc;
+    output(acc);
 }

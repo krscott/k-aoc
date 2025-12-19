@@ -3,7 +3,6 @@
 #include "macros.h"
 
 #include <assert.h>
-#include <stdio.h>
 
 typedef struct
 {
@@ -166,12 +165,12 @@ static usize make_connections(state const s, usize n)
     return i;
 }
 
-i64 day08(FILE *const input, bool const b)
+int main(void)
 {
     defer(strbuf_deinit) strbuf line = strbuf_init();
     defer(vec3list_deinit) vec3list breaker_positions = vec3list_init();
 
-    while (get_line(&line, input) && line.len > 0)
+    while (get_line(&line, stdin) && line.len > 0)
     {
         vec3 position;
         expect(vec3_from_str(strbuf_as_str(line), &position));
@@ -242,7 +241,7 @@ i64 day08(FILE *const input, bool const b)
 
     i64 acc;
 
-    if (!b)
+    if (PART_1)
     {
         // Example uses fewer connections
         usize const connection_count = s.len < 1000 ? 10 : 1000;
@@ -263,5 +262,5 @@ i64 day08(FILE *const input, bool const b)
 
     state_print_info(s);
 
-    return acc;
+    output(acc);
 }

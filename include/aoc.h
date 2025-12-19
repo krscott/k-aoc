@@ -10,9 +10,14 @@
 #include "ktl/prelude.h" // IWYU pragma: export
 #include "macros.h"      // IWYU pragma: export
 
-i64 day01_count_hits(i64 pos, i64 move);
+#ifndef PART_1
+#define PART_1 0
+#endif
+#ifndef PART_2
+#define PART_2 0
+#endif
+
 i64 day01(FILE *input, bool b);
-i64 day02_sum_invalid(i64 start, i64 end, bool b);
 i64 day02(FILE *input, bool b);
 i64 day03(FILE *input, bool b);
 i64 day04(FILE *input, bool b);
@@ -44,6 +49,11 @@ nodiscard bool get_split(strbuf *buf, FILE *stream, char delim);
 nodiscard bool get_line(strbuf *buf, FILE *stream);
 
 nodiscard bool str2int(str s, i64 *out);
+
+static inline void output(i64 const answer)
+{
+    printf("%ld\n", answer);
+}
 
 static inline i64 modulo(i64 x, i64 y)
 {

@@ -11,14 +11,18 @@
 
 #define defer(fn) __attribute__((cleanup(fn)))
 
+#ifndef QUIET
+#define infof(...) fprintf(stderr, __VA_ARGS__)
+#else
 #define infof(...)                                                             \
     do                                                                         \
     {                                                                          \
-        if (aoc_is_verbose)                                                    \
+        if (0)                                                                 \
         {                                                                      \
             fprintf(stderr, __VA_ARGS__);                                      \
         }                                                                      \
     } while (0)
+#endif
 
 #define panicf(...)                                                            \
     do                                                                         \
