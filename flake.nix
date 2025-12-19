@@ -51,6 +51,7 @@
             cmake-format
             clang-tools # NOTE: clang-tools must come before clang
             clang
+            hyperfine
           ]
           ++ aoc.buildInputs;
 
