@@ -5,7 +5,7 @@ if [ -f .env ]; then
     . ./.env
 fi
 
-if [ -z "$AOC_SESSION" ]; then
+if [ -z "${AOC_SESSION:-}" ]; then
     echo "Set AOC_SESSION env var in shell or in .env file"
     exit 1
 fi
