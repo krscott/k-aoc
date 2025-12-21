@@ -51,6 +51,15 @@ static inline i64 modulo(i64 x, i64 y)
     return res >= 0 ? res : res + y;
 }
 
+static inline i64 absi(i64 x)
+{
+    if (x < 0)
+    {
+        x = -x;
+    }
+    return x;
+}
+
 #define chargrid__list strbuf
 #define grid chargrid
 #include "gen/grid.h"
