@@ -28,3 +28,5 @@ check input/2025-07.txt 07 a 1535
 check input/2025-07.txt 07 b 4404709551015
 check input/2025-08.txt 08 a 105952
 check input/2025-08.txt 08 b 975931446
+check input/2025-09.txt 09 a 4782151432
+check input/2025-09.txt 09 b 1450414119
