@@ -6,9 +6,9 @@
 
 i64 dayX(FILE *input, bool b);
 
-i64 dayX(FILE *const input, bool const b)
+i64 dayX(FILE *const input, bool const part2)
 {
-    (void)b;
+    (void)part2;
 
     defer(strbuf_deinit) strbuf line = strbuf_init();
 

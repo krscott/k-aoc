@@ -59,6 +59,17 @@ static inline i64 absi(i64 x)
     }
     return x;
 }
+static inline i64 maxi(i64 a, i64 b)
+{
+    return a > b ? a : b;
+}
+static inline i64 mini(i64 a, i64 b)
+{
+    return a < b ? a : b;
+}
+
+#define max(a, b) ((a) > (b) ? (a) : (b))
+#define min(a, b) ((a) < (b) ? (a) : (b))
 
 #define chargrid__list strbuf
 #define grid chargrid

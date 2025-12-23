@@ -5,8 +5,13 @@
             "name": "Debug LLDB",
             "type": "lldb-dap",
             "request": "launch",
-            "program": "build/src/aoc-app",
-            "args": [],
+            "program": "build/app/aoc-app",
+            "args": [
+                "input/2025-09.txt",
+                "9",
+                "b",
+                "-v"
+            ],
             "cwd": "${workspaceFolder}",
             "stopOnEntry": false,
             "preLaunchTask": "cmake-build"
