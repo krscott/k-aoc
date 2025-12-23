@@ -35,41 +35,6 @@ static nodiscard i64 vec2_rect_area(vec2 const a, vec2 const b)
 #include "ktl/struct/vec.inc"
 #undef ktl_vec
 
-typedef struct
-{
-    vec2 tl;
-    vec2 br;
-} aabb;
-#define aabb_fmts vec2_fmts "~" vec2_fmts
-#define aabb_fmtv(x) vec2_fmtv((x).tl), vec2_fmtv((x).br)
-
-static inline nodiscard aabb aabb_from_corners(vec2 const a, vec2 const b)
-{
-    return (aabb){
-        .tl = (vec2){mini(a.x, b.x), mini(a.y, b.y)},
-        .br = (vec2){maxi(a.x, b.x), maxi(a.y, b.y)},
-    };
-}
-
-static inline nodiscard i64 aabb_rect_area(aabb const b)
-{
-    return vec2_rect_area(b.tl, b.br);
-}
-
-#define aabblist__type aabb
-#define aabblist__infallible_allocator true
-#define ktl_vec aabblist
-#include "ktl/struct/vec.h"
-#include "ktl/struct/vec.inc"
-#undef ktl_vec
-
-static int aabb_cmp_area_rev(void const *a, void const *b)
-{
-    i64 const area_a = aabb_rect_area(*(aabb const *)a);
-    i64 const area_b = aabb_rect_area(*(aabb const *)b);
-    return -i64_cmp(&area_a, &area_b);
-}
-
 #define intmap__key i64
 #define intmap__value usize
 #define intmap__infallible_allocator true
