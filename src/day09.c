@@ -35,6 +35,41 @@ static nodiscard i64 vec2_rect_area(vec2 const a, vec2 const b)
 #include "ktl/struct/vec.inc"
 #undef ktl_vec
 
+typedef struct
+{
+    vec2 tl;
+    vec2 br;
+} aabb;
+#define aabb_fmts vec2_fmts "~" vec2_fmts
+#define aabb_fmtv(x) vec2_fmtv((x).tl), vec2_fmtv((x).br)
+
+static inline nodiscard aabb aabb_from_corners(vec2 const a, vec2 const b)
+{
+    return (aabb){
+        .tl = (vec2){mini(a.x, b.x), mini(a.y, b.y)},
+        .br = (vec2){maxi(a.x, b.x), maxi(a.y, b.y)},
+    };
+}
+
+static inline nodiscard i64 aabb_rect_area(aabb const b)
+{
+    return vec2_rect_area(b.tl, b.br);
+}
+
+#define aabblist__type aabb
+#define aabblist__infallible_allocator true
+#define ktl_vec aabblist
+#include "ktl/struct/vec.h"
+#include "ktl/struct/vec.inc"
+#undef ktl_vec
+
+static int aabb_cmp_area_rev(void const *a, void const *b)
+{
+    i64 const area_a = aabb_rect_area(*(aabb const *)a);
+    i64 const area_b = aabb_rect_area(*(aabb const *)b);
+    return -i64_cmp(&area_a, &area_b);
+}
+
 #define intmap__key i64
 #define intmap__value usize
 #define intmap__infallible_allocator true
@@ -181,36 +216,46 @@ i64 day09(FILE *const input, bool const part2)
 
         chargrid_print_info(&regions);
 
+        defer(aabblist_deinit) aabblist rects = aabblist_init();
+        aabblist_reserve(&rects, coords.len * coords.len);
+
         for (usize i = 0; i < coords.len - 1; ++i)
         {
-            for (usize j = i; j < coords.len; ++j)
+            for (usize j = i + 1; j < coords.len; ++j)
             {
-                vec2 const v0 = coords.ptr[i];
-                vec2 const v1 = coords.ptr[j];
+                aabblist_push(
+                    &rects,
+                    aabb_from_corners(coords.ptr[i], coords.ptr[j])
+                );
+            }
+        }
 
-                usize r0, c0, r1, c1;
-                expect(intmap_get(&x_coords, v0.x, &c0));
-                expect(intmap_get(&x_coords, v1.x, &c1));
-                expect(intmap_get(&y_coords, v0.y, &r0));
-                expect(intmap_get(&y_coords, v1.y, &r1));
+        aabblist_sort_by(rects, aabb_cmp_area_rev);
 
-                bool ok = true;
-                for (usize c = min(c0, c1); ok && c <= max(c0, c1); ++c)
+        for (usize i = 0; i < rects.len; ++i)
+        {
+            vec2 const v0 = rects.ptr[i].tl;
+            vec2 const v1 = rects.ptr[i].br;
+
+            usize r0, c0, r1, c1;
+            expect(intmap_get(&x_coords, v0.x, &c0));
+            expect(intmap_get(&x_coords, v1.x, &c1));
+            expect(intmap_get(&y_coords, v0.y, &r0));
+            expect(intmap_get(&y_coords, v1.y, &r1));
+
+            bool ok = true;
+            for (usize c = min(c0, c1); ok && c <= max(c0, c1); ++c)
+            {
+                for (usize r = min(r0, r1); ok && r <= max(r0, r1); ++r)
                 {
-                    for (usize r = min(r0, r1); ok && r <= max(r0, r1); ++r)
-                    {
-                        ok = chargrid_get(&regions, r, c) == '#';
-                    }
+                    ok = chargrid_get(&regions, r, c) == '#';
                 }
+            }
 
-                if (ok)
-                {
-                    i64 const area = vec2_rect_area(v0, v1);
-                    if (acc < area)
-                    {
-                        acc = area;
-                    }
-                }
+            if (ok)
+            {
+                acc = vec2_rect_area(v0, v1);
+                break;
             }
         }
     }
