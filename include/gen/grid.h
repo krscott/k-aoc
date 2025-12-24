@@ -19,7 +19,7 @@
 // Macros
 
 KTL_DIAG_PUSH
-KTL_DIAG_IGNORE(-Wundef)
+KTL_DIAG_IGNORE("-Wundef")
 
 #undef grid_m
 #define grid_m(x) KTL_TEMPLATE(grid, x)

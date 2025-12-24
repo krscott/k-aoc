@@ -6,9 +6,7 @@
 #include <assert.h>
 #include <stdio.h>
 
-// clang-format off
-KTL_DIAG_IGNORE(-Wunused-macros)
-// clang-format on
+KTL_DIAG_IGNORE("-Wunused-macros")
 
 typedef struct
 {
