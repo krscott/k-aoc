@@ -24,19 +24,6 @@ i64 day09(FILE *input, bool b);
 i64 day10(FILE *input, bool b);
 i64 day11(FILE *input, bool b);
 i64 day12(FILE *input, bool b);
-i64 day13(FILE *input, bool b);
-i64 day14(FILE *input, bool b);
-i64 day15(FILE *input, bool b);
-i64 day16(FILE *input, bool b);
-i64 day17(FILE *input, bool b);
-i64 day18(FILE *input, bool b);
-i64 day19(FILE *input, bool b);
-i64 day20(FILE *input, bool b);
-i64 day21(FILE *input, bool b);
-i64 day22(FILE *input, bool b);
-i64 day23(FILE *input, bool b);
-i64 day24(FILE *input, bool b);
-i64 day25(FILE *input, bool b);
 
 nodiscard bool
 append_stream_until(strbuf *const buf, FILE *const stream, char const delim);

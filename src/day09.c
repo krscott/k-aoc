@@ -105,12 +105,8 @@ static void set_sorted_indices(intmap *m)
     // infof("\n");
 }
 
-i64 day09(FILE *input, bool b);
-
 i64 day09(FILE *const input, bool const part2)
 {
-    (void)part2;
-
     defer(strbuf_deinit) strbuf line = strbuf_init();
     defer(vec2list_deinit) vec2list coords = vec2list_init();
 
