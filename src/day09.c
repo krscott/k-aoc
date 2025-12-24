@@ -1,9 +1,14 @@
 #include "aoc.h"
 #include "ktl/lib/strings.h"
+#include "ktl/macros.h"
 #include "macros.h"
 
 #include <assert.h>
 #include <stdio.h>
+
+// clang-format off
+KTL_DIAG_IGNORE(-Wunused-macros)
+// clang-format on
 
 typedef struct
 {
@@ -243,15 +248,12 @@ i64 day09(FILE *const input, bool const part2)
             expect(intmap_get(&y_coords, v0.y, &r0));
             expect(intmap_get(&y_coords, v1.y, &r1));
 
-            bool ok = true;
-
             for (usize c = c0; c <= c1; ++c)
             {
                 if ((chargrid_get(&regions, r0, c) != '#') ||
                     (chargrid_get(&regions, r1, c) != '#'))
                 {
-                    ok = false;
-                    goto endloop;
+                    goto next;
                 }
             }
 
@@ -260,17 +262,14 @@ i64 day09(FILE *const input, bool const part2)
                 if ((chargrid_get(&regions, r, c0) != '#') ||
                     (chargrid_get(&regions, r, c1) != '#'))
                 {
-                    ok = false;
-                    goto endloop;
+                    goto next;
                 }
             }
 
-        endloop:
-            if (ok)
-            {
-                acc = vec2_rect_area(v0, v1);
-                break;
-            }
+            acc = vec2_rect_area(v0, v1);
+            break;
+        next:
+            continue; // label can't be at end of loop
         }
     }
 
