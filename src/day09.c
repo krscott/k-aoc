@@ -244,14 +244,28 @@ i64 day09(FILE *const input, bool const part2)
             expect(intmap_get(&y_coords, v1.y, &r1));
 
             bool ok = true;
-            for (usize c = min(c0, c1); ok && c <= max(c0, c1); ++c)
+
+            for (usize c = c0; c <= c1; ++c)
             {
-                for (usize r = min(r0, r1); ok && r <= max(r0, r1); ++r)
+                if ((chargrid_get(&regions, r0, c) != '#') ||
+                    (chargrid_get(&regions, r1, c) != '#'))
                 {
-                    ok = chargrid_get(&regions, r, c) == '#';
+                    ok = false;
+                    goto endloop;
                 }
             }
 
+            for (usize r = r0; r <= r1; ++r)
+            {
+                if ((chargrid_get(&regions, r, c0) != '#') ||
+                    (chargrid_get(&regions, r, c1) != '#'))
+                {
+                    ok = false;
+                    goto endloop;
+                }
+            }
+
+        endloop:
             if (ok)
             {
                 acc = vec2_rect_area(v0, v1);
