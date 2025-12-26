@@ -2,6 +2,7 @@
 
 #include "ktl/lib/strings.h"
 #include "ktl/lib/strings.inc"
+#include "macros.h"
 #include "string.h"
 #include <assert.h>
 #include <stdio.h>
@@ -41,41 +42,79 @@ nodiscard bool get_line(strbuf *const buf, FILE *const stream)
 
 nodiscard bool str2int(str s, i64 *out)
 {
-    s = str_trim(s);
-
-    bool const neg = (s.ptr[0] == '-');
-    if (neg)
+    strview sv = strview_trim(strview_from_str(s));
+    i64 tmp;
+    bool const ok = parse_int(sv, &tmp, &sv) && sv.len == 0;
+    if (ok)
     {
-        str_split_at(s, 1, NULL, &s);
+        *out = tmp;
     }
+    return ok;
+}
 
+nodiscard bool parse_int(strview s, i64 *out, strview *tail)
+{
     bool ok = false;
     i64 acc = 0;
 
-    for (usize i = 0; i < s.len; ++i)
+    s = strview_trim_start(s);
+
+    if (s.len > 0)
     {
-        char const c = s.ptr[i];
-        ok = '0' <= c && c <= '9';
-        if (ok)
+        bool const neg = (s.ptr[0] == '-');
+        if (neg)
         {
-            if (neg)
+            strview_split_at(s, 1, NULL, &s);
+        }
+
+        char c;
+        strview tmp;
+        while (strview_split_first(s, &c, &tmp))
+        {
+            if ('0' <= c && c <= '9')
             {
-                acc = acc * 10 - (i64)(c - '0');
+                // Found any correct digit
+                ok = true;
+                s = tmp;
+
+                if (neg)
+                {
+                    acc = acc * 10 - (i64)(c - '0');
+                }
+                else
+                {
+                    acc = acc * 10 + (i64)(c - '0');
+                }
             }
             else
             {
-                acc = acc * 10 + (i64)(c - '0');
+                break;
             }
-        }
-        else
-        {
-            break;
         }
     }
 
     if (ok)
     {
-        *out = acc;
+        if (out)
+        {
+            *out = acc;
+        }
+        if (tail)
+        {
+            *tail = s;
+        }
+    }
+    return ok;
+}
+
+nodiscard bool
+parse_expect(strview input, char const *const match, strview *const output)
+{
+    strview const match_sv = strview_from_terminated(match);
+    bool const ok = strview_starts_with(input, match_sv);
+    if (ok)
+    {
+        strview_split_at(input, match_sv.len, NULL, output);
     }
     return ok;
 }

@@ -39,4 +39,11 @@
         }                                                                      \
     } while (0)
 
+#define ignore(cond)                                                           \
+    do                                                                         \
+    {                                                                          \
+        _Bool cond_ = (cond);                                                  \
+        (void)cond_;                                                           \
+    } while (0)
+
 #endif
