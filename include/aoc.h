@@ -32,6 +32,10 @@ nodiscard bool get_line(strbuf *buf, FILE *stream);
 
 nodiscard bool str2int(str s, i64 *out);
 
+nodiscard bool parse_int(strview s, i64 *out, strview *tail);
+nodiscard bool
+parse_expect(strview input, char const *const match, strview *const output);
+
 static inline i64 modulo(i64 x, i64 y)
 {
     i64 const res = x % y;
