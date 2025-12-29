@@ -13,7 +13,7 @@ typedef struct
     u8 num_lights;
     u16 lights_goal;
     u16 lights_state;
-    u8 switches[MAX_LEN + 1][MAX_LEN + 1];
+    u16 switch_options[MAX_LEN + 1];
     u8 joltage[MAX_LEN + 1];
 } machine;
 
@@ -47,16 +47,23 @@ static void machine_print_info(machine const *const m)
     }
     infof("] ");
 
-    for (usize i = 0; i < MAX_LEN && m->switches[i][0] != 0xff; ++i)
+    for (usize i = 0; m->switch_options[i]; ++i)
     {
         infof("(");
-        for (usize j = 0; j < MAX_LEN && m->switches[i][j] != 0xff; ++j)
+        u16 x = m->switch_options[i];
+        for (usize j = 0; x; ++j)
         {
-            infof("%u", m->switches[i][j]);
-            if (j < MAX_LEN - 1 && m->switches[i][j + 1] != 0xff)
+            if (x & 1)
             {
-                infof(",");
+                infof("%zu", j);
+
+                if ((x >> 1) != 0)
+                {
+                    infof(",");
+                }
             }
+
+            x >>= 1;
         }
         infof(") ");
     }
@@ -140,8 +147,7 @@ static nodiscard bool parse_switches_single(
             if ((ok = parse_int(sv, &x, &sv)))
             {
                 // infof("int: %ld\n", x);
-                m->switches[i][j++] = (u8)x;
-                m->switches[i][j] = 0xff;
+                m->switch_options[i] |= 1 << x;
             }
         } while (ok && j < MAX_LEN && parse_token(sv, ",", &sv));
 
@@ -171,10 +177,6 @@ parse_switches(strview sv, machine *const m, strview *const tail)
     for (usize i = 0; i < MAX_LEN && parse_switches_single(sv, m, i, &sv); ++i)
     {
         ok = true;
-        if (i < MAX_LEN - 1)
-        {
-            m->switches[i + 1][0] = 0xff;
-        }
     }
 
     if (ok && tail)
@@ -216,39 +218,46 @@ parse_joltage(strview sv, machine *const m, strview *const tail)
 
 static nodiscard bool machine_parse(machine *m, strview sv)
 {
+    memset(m, 0, sizeof(*m));
     return parse_lights(sv, m, &sv)      //
            && parse_switches(sv, m, &sv) //
            && parse_joltage(sv, m, &sv);
 }
 
-static void machine_step(machine *m)
+static u8 bits_diff(u16 a, u16 b)
+{
+    u8 count = 0;
+    for (usize i = 0; i < 16; ++i)
+    {
+        if (((a ^ b) & (1 << i)) == 0)
+        {
+            ++count;
+        }
+    }
+    return count;
+}
+
+static bool machine_step(machine *m)
 {
     usize best_idx = 0;
-    u8 best_score = 0;
-    for (usize i = 0; i < MAX_LEN && m->switches[i][0] != 0xff; ++i)
+    u8 best_score = 0xff;
+    for (usize i = 0; i < MAX_LEN && m->switch_options[i]; ++i)
     {
-        u16 new_state = m->lights_state;
-        for (usize j = 0; j < MAX_LEN && m->switches[i][j] != 0xff; ++j)
-        {
-            new_state ^= 1 << (m->switches[i][j]);
-        }
+        u8 const score =
+            bits_diff(m->lights_state, m->lights_state ^ m->switch_options[i]);
 
-        u8 score = 0;
-        for (usize k = 0; k < m->num_lights; ++k)
-        {
-            if ((m->lights_state >> k) == (new_state >> k))
-            {
-                ++score;
-            }
-        }
-
-        if (best_score < score)
+        if (best_score > score)
         {
             best_score = score;
             best_idx = i;
         }
     }
-    expect(best_score > 0);
+    expect(best_score < 0xff);
+
+    infof("Apply option %zu\n", best_idx);
+    m->lights_state ^= m->switch_options[best_idx];
+
+    return m->lights_state != m->lights_goal;
 }
 
 i64 day10(FILE *const input, bool const part2)
@@ -263,7 +272,11 @@ i64 day10(FILE *const input, bool const part2)
     while (get_line(&line, input) && line.len > 0)
     {
         expect(machine_parse(&m, strbuf_as_strview(line)));
-        machine_print_info(&m);
+
+        while (machine_step(&m))
+        {
+            machine_print_info(&m);
+        }
     }
 
     return acc;
