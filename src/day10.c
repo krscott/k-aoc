@@ -1,5 +1,6 @@
 #include "aoc.h"
 #include "ktl/lib/strings.h"
+#include "ktl/macros.h"
 #include "macros.h"
 
 #include <assert.h>
@@ -7,6 +8,25 @@
 #include <string.h>
 
 #define MAX_LEN 10
+
+static i64 lightsnode_heuristic(u16 const node, u16 const goal)
+{
+    u16 const diff = node ^ goal;
+    i64 dist = 0;
+    for (usize i = 0; i < MAX_LEN; ++i)
+    {
+        dist += (diff >> i) & 1;
+    }
+    return dist;
+}
+
+#define lightsnode__node u16
+#define lightsnode__h lightsnode_heuristic
+#define lightsnode__infallible_allocator true
+#define aoc_pathfind lightsnode
+#include "gen/aoc_pathfind.h"
+#include "gen/aoc_pathfind.inc"
+#undef aoc_pathfind
 
 typedef struct
 {
